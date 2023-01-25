@@ -16,7 +16,7 @@ public class RingBuffer<T>
     {
     	var r=new ArrayList<T>(length);
     	for(var i=0;i<length;i++) {
-    		r.set(i, pad);
+    		r.add(pad);
     	}
         return r;
     }
@@ -56,7 +56,7 @@ public class RingBuffer<T>
                 assert(pos+size<=l);
                 var ret=new ArrayList<T>(size);
                 for(var i=0;i<size;i++){
-                    ret.set(i,this._buf.get((p+i)%l));
+                    ret.add(i,this._buf.get((p+i)%l));
 //                    ret[i]=this._buf[(p+i)%l];
                 }
                 return ret;
@@ -65,7 +65,7 @@ public class RingBuffer<T>
                 var ret=new ArrayList<T>(-size);
                 // return tuple([self._buf[(p+size+i+1)%l] for i in range(-size)])
                 for(var i=0;i<-size;i++){
-                    ret.set(i,this._buf.get((p+size+i+1)%l));
+                    ret.add(i,this._buf.get((p+size+i+1)%l));
 //                    ret[i]=this._buf[(p+size+i+1)%l];
                 }
                 return ret;
@@ -75,9 +75,9 @@ public class RingBuffer<T>
             if(size>=0){
                 assert(l+pos+size<=l);
                 // return tuple([self._buf[(p+i)%l] for i in range(size)])
-                var ret=new ArrayList<T>(size);
+                var ret=new ArrayList<T>();
                 for(var i=0;i<size;i++){
-                    ret.set(i,this._buf.get((p+i)%l));
+                    ret.add(i,this._buf.get((p+i)%l));
 //                    ret[i]=this._buf[(p+i)%l];
                 }
                 return ret;
@@ -86,7 +86,7 @@ public class RingBuffer<T>
                 // return tuple([self._buf[(p-i+l)%l] for i in range(-size)])
                 var ret=new ArrayList<T>(size);
                 for(var i=0;i<-size;i++){
-                    ret.set(i,this._buf.get((p-i+l)%l));
+                    ret.add(i,this._buf.get((p-i+l)%l));
 //                    ret[i]=this._buf[(p-i+l)%l];
                 }
                 return ret;

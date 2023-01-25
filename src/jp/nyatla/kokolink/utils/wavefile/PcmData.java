@@ -1,7 +1,9 @@
 package jp.nyatla.kokolink.utils.wavefile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import jp.nyatla.kokolink.compatibility;
@@ -15,38 +17,83 @@ import jp.nyatla.kokolink.utils.wavefile.riffio.WaveFile;
 public class PcmData
 {
 	final private WaveFile _wavfile;
-    public PcmData load(IBinaryReader fp)
+    public static PcmData load(IBinaryReader fp) throws IOException
     {
         return new PcmData(fp);
     }
+    public static PcmData load(InputStream src) throws IOException
+    {
+    	var io=new IBinaryReader() {
+			@Override
+			public Byte[] readBytes(int size) throws IOException {
+				return compatibility.fromPrimitiveByteArray(src.readNBytes(size));
+			}
 
+			@Override
+			public int readInt32LE() throws IOException {
+				byte[] b=src.readNBytes(4);
+				return (int)(((0xff&b[3]) << 24) | ((0xff&b[2]) << 16) | ((0xff&b[1]) << 8) | (0xff & b[0]));
+			}
 
-    public static void dump(PcmData src, IBinaryWriter dest)
+			@Override
+			public int readInt16LE() throws IOException {
+				byte[] b=src.readNBytes(2);
+				return (int)((0xff&b[1]) << 8) | (0xff&b[0]);
+			}};    	
+        return new PcmData(io);
+    }
+
+    
+    public static void dump(PcmData src, IBinaryWriter dest) throws IOException
     {
         src._wavfile.dump(dest);
     }
+    public static void dump(PcmData src, OutputStream dest) throws IOException
+    {
+    	var io=new IBinaryWriter() {
+			@Override
+			public int writeBytes(List<Byte> buf) throws IOException {
+				dest.write(compatibility.toPrimitiveByteArray(buf));
+				return buf.size();
+			}
+
+			@Override
+			public int writeBytes(byte[] buf) throws IOException {
+				dest.write(buf);
+				return buf.length;
+			}};
+		PcmData.dump(src,io);
+    }
 
 
-    public PcmData(IBinaryReader fp) {
+    public PcmData(IBinaryReader fp) throws IOException {
     	this._wavfile=new WaveFile(fp);
     }
 
+    public PcmData(Byte[] src, int sample_bits, int frame_rate) {
+        this(src,sample_bits,frame_rate,null);
+    }
     public PcmData(Byte[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
         this._wavfile=new WaveFile(frame_rate, sample_bits/8, 1,src, chunks);
+    }
+    public PcmData(byte[] src, int sample_bits, int frame_rate) {
+    	this(src,sample_bits,frame_rate,null);
     }
     public PcmData(byte[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
         this._wavfile=new WaveFile(frame_rate, sample_bits/8, 1,compatibility.fromPrimitiveByteArray(src), chunks);
     }
 
 
-    public PcmData(Collection<Double> src, int sample_bits, int frame_rate, List<Chunk> chunks)
-    {
-        this._wavfile=new WaveFile(frame_rate, sample_bits / 8, 1,float2bytes(new PyIterator<Double>(src),sample_bits), chunks);
+
+    public PcmData(double[] src, int sample_bits, int frame_rate) {
+    	this(compatibility.fromPrimitiveDoubleArray(src),sample_bits,frame_rate,null);
     }
     public PcmData(double[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
     	this(compatibility.fromPrimitiveDoubleArray(src),sample_bits,frame_rate,chunks);
     }
-
+    public PcmData(Double[] src, int sample_bits, int frame_rate) {
+        this(src,sample_bits,frame_rate,null);
+    }
     public PcmData(Double[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
         this._wavfile=new WaveFile(
         		frame_rate,
@@ -104,9 +151,9 @@ public class PcmData
             double r = (Math.pow(2, 16) - 1) / 2;//(2 * *16 - 1)//2 #Daisukeパッチ
             int c = 0;
             int b = 0;
-            for (var i = 0;i < data_size;i++)
+            for (var i :data)
             {
-                b = (int)(b >> 8 | (i << 8));
+                b = (int)(((b >> 8)&0xff) | (0xff&i) << 8);
                 c = (c + 1) % 2;
                 if (c == 0) {
                     if ((0x8000 & b) == 0) {
@@ -114,7 +161,7 @@ public class PcmData
                     }
                     else
                     {
-                        ret.add((((int)b - 0x0000ffff) - 1) / r);
+                        ret.add(((b - 0x0000ffff) - 1) / r);
                     }
                     b = 0;
                 }

@@ -1,8 +1,10 @@
 package jp.nyatla.kokolink;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -20,20 +22,20 @@ public class compatibility
 	}
 
 	public static interface IBinaryReader{		
-	    Byte[] readBytes(int size);
-	    int readInt32LE();
-	    int readInt16LE();
+	    Byte[] readBytes(int size) throws IOException;
+	    int readInt32LE() throws IOException;
+	    int readInt16LE() throws IOException;
 	}
 	
 	public static interface IBinaryWriter{
-	    int writeBytes(List<Byte> buf);
-		int writeBytes(byte[] buf);
+	    int writeBytes(List<Byte> buf) throws IOException;
+		int writeBytes(byte[] buf) throws IOException;
 	}
 	static public class MemBuffer extends ArrayList<Byte>
 	{
 		private static final long serialVersionUID = 1L;
-		public int writeBytes(IBinaryReader s,int size) {
-			return this.writeBytes(s.readBytes(size),0);
+		public int writeBytes(IBinaryReader s,int size) throws IOException {
+			return this.writeBytes(s.readBytes(size));
 
 		}
 	
@@ -63,6 +65,9 @@ public class compatibility
 				
 			}
 		}
+		public int writeBytes(Byte[] s) {
+			return this.writeBytes(s,0);
+		}
 		public int writeBytes(Byte[] s,int padding) {
 			var r=this._writeBytes(s);
 			var t=new Byte[] {0};
@@ -76,7 +81,7 @@ public class compatibility
 	        (byte)((v >> 0) & 0xff),
 	        (byte)((v >> 8) & 0xff)
 	        };
-	        return this.writeBytes(w,0);
+	        return this.writeBytes(w);
 	    }
 	    public int writeInt32LE(int v) {
 	    	var w = new Byte[]{
@@ -85,7 +90,7 @@ public class compatibility
 	        (byte)((v >> 16) & 0xff),
 	        (byte)((v >> 24) & 0xff)
 	        };
-	        return this.writeBytes(w, 4);
+	        return this.writeBytes(w);
 	    };
 	    public byte[] asBytes(int idx,int size) {
 	    	var r=new byte[size];
@@ -103,14 +108,14 @@ public class compatibility
 	    	return new String(b);	    	
 	    }
 	    public int asInt32LE(int idx) {
-	    	var w=this.subList(idx,4).toArray(new Byte[0]);
-	        return ((int)(w[3]) << 24) | ((int)(w[2]) << 16) | ((int)(w[1]) << 8) | w[0];
+	    	var w=this.subList(idx,idx+4).toArray(new Byte[0]);
+	        return ((int)(0xff&w[3]) << 24) | ((int)(0xff&w[2]) << 16) | ((int)(0xff&w[1]) << 8) | (0xff&w[0]);
 	    }
 	    public int asInt16LE(int idx){
-	    	var w=this.subList(idx,2).toArray(new Byte[0]);
-	        return ((int)((int)(w[1]) << 8) | w[0]);
+	    	var w=this.subList(idx,idx+2).toArray(new Byte[0]);
+	        return ((int)((0xff&w[1]) << 8) | (0xff&w[0]));
 	    }	    
-		public int dump(IBinaryWriter dest) {
+		public int dump(IBinaryWriter dest) throws IOException {
 			return dest.writeBytes(this);
 		}
 	}
@@ -228,14 +233,14 @@ public class compatibility
         }
 
     }
-    public static byte[] toPrimitiveDoubleArray(List<Byte> s) {
+    public static byte[] toPrimitiveByteArray(List<Byte> s) {
     	var r=new byte[s.size()];
     	for(int i=0;i<s.size();i++) {
     		r[i]=s.get(i);
     	}
     	return r;
     }    
-    public static double[] toPrimitiveByteArray(List<Double> s) {
+    public static double[] toPrimitiveDoubleArray(List<Double> s) {
     	var r=new double[s.size()];
     	for(int i=0;i<s.size();i++) {
     		r[i]=s.get(i);
@@ -295,16 +300,22 @@ public class compatibility
     	}
     	static public void sort(List<Double> a,boolean reverse) {
     		if(reverse) {
-                a.sort(new Comparator<Double>(){
+    			a.sort(new Comparator<Double>(){
     				@Override
     				public int compare(Double a, Double b) {
-    					return a == b ? 0 : (a < b ? 1 : -1);
+    					if((double)a==(double)b) {
+    						return 0;
+    					}
+    					return (a < b ? 1 : -1);
     				}});    			
     		}else {
-                a.sort(new Comparator<Double>(){
+    			a.sort(new Comparator<Double>(){
     				@Override
     				public int compare(Double a, Double b) {
-    					return a == b ? 0 : (a > b ? 1 : -1);
+    					if((double)a==(double)b) {
+    						return 0;
+    					}
+    					return (a > b ? 1 : -1);
     				}});    			
     		}
         }
@@ -314,7 +325,7 @@ public class compatibility
         @SuppressWarnings("unchecked")
 		static public <T> IPyIterator<T> toPyIter(Iterable<T> s)
         {
-            if (!(s instanceof IPyIterator))
+            if ((s instanceof IPyIterator))
             {
                 return (IPyIterator<T>) s;
             }
@@ -345,7 +356,7 @@ public class compatibility
         {
             var r=new ArrayList<T>();
             for(var i=0;i<n;i++) {
-            	r.set(i,pad);
+            	r.add(i,pad);
             }
             return r;
         }

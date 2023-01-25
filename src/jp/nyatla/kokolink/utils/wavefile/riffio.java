@@ -1,6 +1,7 @@
 package jp.nyatla.kokolink.utils.wavefile;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class riffio
 			this._name=this._buf.writeBytes(name,4);
 			this._size=this._buf.writeInt32LE(size);
 		}
-		public Chunk(IBinaryReader s){
+		public Chunk(IBinaryReader s) throws IOException{
 			this._name=this._buf.writeBytes(s,4);
 			this._size=this._buf.writeBytes(s,4);
 		}
@@ -33,7 +34,7 @@ public class riffio
 		public int getSize() {
 			return this._buf.asInt32LE(this._size);
 		}
-	    public int dump(IBinaryWriter writer){
+	    public int dump(IBinaryWriter writer) throws IOException{
 	        return this._buf.dump(writer);
 	    }
 	}
@@ -44,13 +45,13 @@ public class riffio
 			super(name,data.length);
 			this._data=this._buf.writeBytes(data,data.length%2);
 		}
-		public RawChunk(String name,int size,IBinaryReader fp){
+		public RawChunk(String name,int size,IBinaryReader fp) throws IOException{
 			super(name,size);
 			this._data=this._buf.writeBytes(fp,this.getSize() + this.getSize() % 2);
 		}
 		
 		public List<Byte> getData() {
-			return this._buf.subList(8,this._data);
+			return this._buf.subList(this._data,this._buf.size());
 		}
 
 	}
@@ -58,7 +59,7 @@ public class riffio
 	{
         private static int CHUNK_SIZE = 2 + 2 + 4 + 4 + 2 + 2;
         private static int WAVE_FORMAT_PCM = 0x0001;		
-        public FmtChunk(int size,IBinaryReader fp){
+        public FmtChunk(int size,IBinaryReader fp) throws IOException{
 			super("fmt ",size);
 	        this._buf.writeBytes(fp, 2);
 	        this._buf.writeBytes(fp, 2);
@@ -79,21 +80,21 @@ public class riffio
 	    }
 	    public int getNchannels()
 	    {
-	        return this._buf.asInt16LE(2);
+	        return this._buf.asInt16LE(2+8);
 	    }
 	
 	    int getFramerate()
 	    {
-	        return this._buf.asInt32LE(4);
+	        return this._buf.asInt32LE(4+8);
 	    }
 	
 	    int getSamplewidth()
 	    {
-	        return this._buf.asInt16LE(14);
+	        return this._buf.asInt16LE(14+8);
 	    }		
 	}
 	static public class DataChunk extends RawChunk{
-		public DataChunk(int size, IBinaryReader fp) {
+		public DataChunk(int size, IBinaryReader fp) throws IOException {
 			super("data", size, fp);
 		}
 		public DataChunk(Byte[] data){
@@ -103,12 +104,12 @@ public class riffio
 	static public class ChunkHeader extends Chunk
 	{
 		final private int _form;
-	    public ChunkHeader(IBinaryReader fp)
+	    public ChunkHeader(IBinaryReader fp) throws IOException
 	    {
 	    	super(fp);
 	    	this._form=this._buf.writeBytes(fp, 4);
 	    }
-	    public ChunkHeader(String name, int size, IBinaryReader fp) {
+	    public ChunkHeader(String name, int size, IBinaryReader fp) throws IOException {
 	    	super(name, size);
 	        this._form=this._buf.writeBytes(fp, 4);
 	    }
@@ -123,7 +124,7 @@ public class riffio
     }
 	
 	static public class RiffHeader extends ChunkHeader{
-    	public RiffHeader(IBinaryReader fp)
+    	public RiffHeader(IBinaryReader fp) throws IOException
     	{
         	super(fp);
             assert(this.getName()=="RIFF");
@@ -136,13 +137,13 @@ public class riffio
     {
     	final private int _payload;
     	final private int _payload_len;
-    	public RawListChunk(IBinaryReader fp) {
+    	public RawListChunk(IBinaryReader fp) throws IOException {
     		super(fp);
             assert(this.getName()=="LIST");
             this._payload_len=this.getSize() - 4;
             this._payload=this._buf.writeBytes(fp,this._payload_len);
     	}
-	    public RawListChunk(int size, IBinaryReader fp) {
+	    public RawListChunk(int size, IBinaryReader fp) throws IOException {
 	    	super("LIST", size, fp);
             this._payload_len=this.getSize() - 4;
 	        this._payload=this._buf.writeBytes(fp,this._payload_len);
@@ -150,7 +151,7 @@ public class riffio
 	    public RawListChunk(String form,Byte[] payload, int payload_len) {
 	    	super("LIST", payload_len + 4, form);
             this._payload_len=this.getSize() - 4;
-	        this._payload=this._buf.writeBytes(payload,payload_len);
+	        this._payload=this._buf.writeBytes(payload);
 	    }
 	    public byte[] getPayload() {
 	        return this._buf.asBytes(this._payload,this._payload_len);
@@ -158,11 +159,11 @@ public class riffio
     }
     static public class WaveFile extends RiffHeader{
     	final private List<Chunk> _chunks;
-    	public WaveFile(IBinaryReader fp)
+    	public WaveFile(IBinaryReader fp) throws IOException
     	{
     		super(fp);
     	    this._chunks=new ArrayList<Chunk>();
-    	    assert(this.getForm()=="WAVE");
+    	    assert(this.getForm().compareTo("WAVE")==0);
     	    var chunk_size = this.getSize();
     	    chunk_size -= 4;//fmt分
     	    while (chunk_size > 8)
@@ -175,14 +176,14 @@ public class riffio
     	            break;
     	        }
     	        int size=fp.readInt32LE();
-    	        chunk_size -= 8;
-    	        if (name=="fmt ") {
+    	        chunk_size -= 8+size+(size%2);
+    	        if (name.compareTo("fmt ")==0) {
     	            this._chunks.add(new FmtChunk(size, fp));
     	        }
-    	        else if (name=="data") {
+    	        else if (name.compareTo("data")==0) {
     	            this._chunks.add(new DataChunk(size, fp));
     	        }
-    	        else if (name=="LIST"){
+    	        else if (name.compareTo("LIST")==0){
     	            this._chunks.add(new RawListChunk(size, fp));
     	        }
     	        else {
@@ -241,13 +242,13 @@ public class riffio
     	public Chunk getChunk(String name)
     	{
     	    for (var i = 0;i < this._chunks.size();i++) {
-    	        if (this._chunks.get(i).getName()==name) {
+    	        if (this._chunks.get(i).getName().compareTo(name)==0) {
     	            return this._chunks.get(i);
     	        }
     	    }
     	    return null;
     	}
-    	public int dump(IBinaryWriter writer)
+    	public int dump(IBinaryWriter writer) throws IOException
     	{
     	    int ret=0;
     	    ret += super.dump(writer);

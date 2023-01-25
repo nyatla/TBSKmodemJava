@@ -300,7 +300,7 @@ public class CoffPreamble implements Preamble
                         var lh = cof.getBuf().sublist(s, cycle * symbol_ticks);
 //                        Array.Sort(lh);
 //                        Array.Reverse(lh);
-                        Functions.sort(lw,true);
+                        Functions.sort(lh,true);
                         //lh = lh.subList(0,lh.size() * 3 / 2 + 1); //lh = lh[:len(lh) * 3 / 2 + 1]
 
                         if (Functions.sum(lh) / lh.size() < lh.get(0) * 0.66)
