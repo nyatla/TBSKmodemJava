@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 public class MSequence implements IPyIterator<Integer>
 {

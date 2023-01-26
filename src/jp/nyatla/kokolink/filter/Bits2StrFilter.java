@@ -7,8 +7,8 @@ import java.util.List;
 import jp.nyatla.kokolink.interfaces.IFilter;
 import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.BitsWidthConvertIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 

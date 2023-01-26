@@ -1,9 +1,9 @@
 package jp.nyatla.kokolink.utils;
 
 
+import jp.nyatla.kokolink.compatibility.Disposable;
 import jp.nyatla.kokolink.types.Py__class__.BasicIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
-import jp.nyatla.kokolink.compatibility.Disposable;
 
 public class recoverable
 {

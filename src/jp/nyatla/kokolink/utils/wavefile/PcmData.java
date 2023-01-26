@@ -9,7 +9,7 @@ import java.util.List;
 import jp.nyatla.kokolink.compatibility;
 import jp.nyatla.kokolink.compatibility.IBinaryReader;
 import jp.nyatla.kokolink.compatibility.IBinaryWriter;
-import jp.nyatla.kokolink.compatibility.PyIterator;
+import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.utils.wavefile.riffio.Chunk;
 import jp.nyatla.kokolink.utils.wavefile.riffio.WaveFile;

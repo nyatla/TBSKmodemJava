@@ -1,7 +1,7 @@
 package jp.nyatla.kokolink.utils;
 
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 
 // """ 末尾からticksまでの平均値を連続して返却します。

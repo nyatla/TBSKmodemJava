@@ -2,9 +2,9 @@ package jp.nyatla.kokolink.streams;
 
 import jp.nyatla.kokolink.interfaces.IBitStream;
 import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
-import jp.nyatla.kokolink.compatibility;
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
+import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.BitsWidthConvertIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 
@@ -19,7 +19,7 @@ public class BitStream extends BasicRoStream<Integer> implements IBitStream
     }
     public BitStream(Iterable<Integer> src, int bitwidth)
     {
-    	this(new compatibility.PyIterator<Integer>(src),bitwidth);
+    	this(new PyIterator<Integer>(src),bitwidth);
     }
 
     public BitStream(IPyIterator<Integer> src){

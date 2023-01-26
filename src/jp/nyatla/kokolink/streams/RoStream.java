@@ -1,8 +1,8 @@
 package jp.nyatla.kokolink.streams;
 
 import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 
 // """T型のRoStreamです。

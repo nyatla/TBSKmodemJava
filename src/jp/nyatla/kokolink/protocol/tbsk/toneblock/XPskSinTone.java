@@ -2,8 +2,8 @@ package jp.nyatla.kokolink.protocol.tbsk.toneblock;
 
 import java.util.ArrayList;
 
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.math.XorShiftRand31;
 
 // """ Sin波形をXPSK変調したトーン信号です。

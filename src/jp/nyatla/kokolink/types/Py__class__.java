@@ -1,6 +1,9 @@
 package jp.nyatla.kokolink.types;
 
-import jp.nyatla.kokolink.compatibility.PyIterator;
+import java.util.Arrays;
+import java.util.Iterator;
+
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 public class Py__class__{
     static public class PyStopIteration extends Exception
@@ -17,14 +20,35 @@ public class Py__class__{
         }
     }
 
-    /*
-    IIteratorはPythonのIteratorのエミュレーションインタフェイスです。
-    */
-    static public interface IPyIterator<T> extends Py__special_functions__.Py__next__<T>{
-        //sealed void Reset()
-        //{
-        //    throw NotSupportedException();
-        //}
+    static public class PyIterator<T> implements IPyIterator<T>
+    {
+
+        private Iterator<T> _src;
+        public PyIterator(T[] src)
+        {
+            this._src = Arrays.asList(src). iterator();
+        }
+
+        public PyIterator(Iterable<T> src)
+        {
+            this._src = src.iterator();
+        }
+
+        public PyIterator(Iterator<T> src)
+        {
+            this._src = src;
+
+        }
+        @Override
+        public T next() throws PyStopIteration
+        {
+            if (!this._src.hasNext())
+            {
+                throw new PyStopIteration();
+            }
+            return this._src.next();
+        }
+
     }
 
 

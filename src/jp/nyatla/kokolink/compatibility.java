@@ -2,15 +2,14 @@ package jp.nyatla.kokolink;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
+import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 
 
@@ -203,36 +202,7 @@ public class compatibility
 
 
 
-    static public class PyIterator<T> implements IPyIterator<T>
-    {
 
-        private Iterator<T> _src;
-        public PyIterator(T[] src)
-        {
-            this._src = Arrays.asList(src). iterator();
-        }
-
-        public PyIterator(Iterable<T> src)
-        {
-            this._src = src.iterator();
-        }
-
-        public PyIterator(Iterator<T> src)
-        {
-            this._src = src;
-
-        }
-        @Override
-        public T next() throws PyStopIteration
-        {
-            if (!this._src.hasNext())
-            {
-                throw new PyStopIteration();
-            }
-            return this._src.next();
-        }
-
-    }
     public static byte[] toPrimitiveByteArray(List<Byte> s) {
     	var r=new byte[s.size()];
     	for(int i=0;i<s.size();i++) {

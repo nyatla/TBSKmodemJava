@@ -1,7 +1,7 @@
 package jp.nyatla.kokolink;
 
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 public class interfaces
 {

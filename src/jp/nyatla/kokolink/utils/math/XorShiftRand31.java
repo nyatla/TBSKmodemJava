@@ -1,6 +1,6 @@
 package jp.nyatla.kokolink.utils.math;
 
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 // """ https://ja.wikipedia.org/wiki/Xorshift
 // """

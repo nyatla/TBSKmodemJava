@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import jp.nyatla.kokolink.compatibility.Functions;
-import jp.nyatla.kokolink.compatibility.PyIterator;
 import jp.nyatla.kokolink.compatibility.TbskIterable;
 import jp.nyatla.kokolink.filter.BitsWidthFilter;
 import jp.nyatla.kokolink.interfaces.IBitStream;
@@ -17,10 +16,11 @@ import jp.nyatla.kokolink.streams.BitStream;
 import jp.nyatla.kokolink.streams.ByteStream;
 import jp.nyatla.kokolink.streams.RoStream;
 import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
 import jp.nyatla.kokolink.types.Py__class__.IterChain;
+import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py__class__.Repeater;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 // """ TBSKの変調クラスです。
 //     プリアンブルを前置した後にビットパターンを置きます。

@@ -4,10 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.nyatla.kokolink.compatibility.PyIterator;
 import jp.nyatla.kokolink.streams.bytestreams.BasicByteStream;
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
+import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 public class ByteStream extends BasicByteStream{
     public static class ByteCastIter implements IPyIterator<Integer>

@@ -1,9 +1,6 @@
 package jp.nyatla.kokolink.io.audio;
 
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
-
-
-
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 public class audioif
 {

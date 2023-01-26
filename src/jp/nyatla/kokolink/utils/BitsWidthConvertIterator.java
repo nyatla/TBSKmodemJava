@@ -1,8 +1,8 @@
 package jp.nyatla.kokolink.utils;
 
 import jp.nyatla.kokolink.interfaces.IRecoverableIterator;
-import jp.nyatla.kokolink.types.Py__class__.IPyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 
 
