@@ -26,22 +26,12 @@ public class MSeqTone extends TraitTone{
         }
         return a;
     }
-    public MSeqTone(MSequence mseq) {
-    	this(mseq,null);
-    }
-
     public MSeqTone(MSequence mseq, TraitTone base_tone) {
     	super(_constructor_init(mseq, base_tone));
         this._sequence = mseq.genOneCycle();
     };
 
-    public MSeqTone(int bits,int tap) {
-    	this(new MSequence(bits, tap),null);
-    }
-    public MSeqTone(int bits,int tap,TraitTone base_tone)
-    {
-        this(new MSequence(bits, tap), base_tone);
-    }
+
     public Iterable<Integer> getSequence()
     {
         return this._sequence;

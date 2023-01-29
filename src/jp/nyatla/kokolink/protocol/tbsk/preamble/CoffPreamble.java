@@ -60,10 +60,11 @@ public class CoffPreamble implements Preamble
     private int _cycle; //#平坦部分のTick数
     private boolean _asmethtod_lock;
 
+    public final static double DEFAULT_TH=1.0;
+    public final static int DEFAULT_CYCLE=4;
+    
 
-    public CoffPreamble(TraitTone tone){
-    	this(tone,1.0,4);
-    }
+
     public CoffPreamble(TraitTone tone, double threshold,int cycle){
         this._threshold=threshold;
         this._symbol=tone;

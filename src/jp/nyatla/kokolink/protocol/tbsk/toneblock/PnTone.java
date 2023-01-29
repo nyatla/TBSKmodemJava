@@ -27,12 +27,6 @@ public class PnTone extends TraitTone{
         }
         return d;
     }
-    // """ トーン信号をPN符号でBPSK変調した信号です。
-    //     intervalティック単位で変調します。
-    // """
-    public PnTone(int seed) {
-    	this(seed, 2,null);
-    }
     public PnTone(int seed,int interval,TraitTone base_tone) {
     	super(_constructor_init(seed, interval,base_tone));
     }

@@ -136,7 +136,7 @@ public class compatibility
         private boolean _is_recoverable;
         public PyIterSuorceIterator(IPyIterator<T> src)
         {
-            assert(src instanceof Iterable); //Enumulableを持たないこと
+            assert(!(src instanceof Iterable)); //Enumulableを持たないこと
             this._src = src;
             this._is_recoverable=false;
         }
@@ -199,9 +199,143 @@ public class compatibility
 			return new TbskIterable<T>(new PyIterSuorceIterator<T>(src));
 		}		
 	}
+	public static IPyIterator<Integer> toIntegerPyIterator(int[] s){
+		return new IPyIterator<Integer>()
+		{
+			private int idx=0;
+			@Override
+			public Integer next() throws PyStopIteration{
+				if(idx<s.length) {
+					return s[idx++];
+				}
+				throw new PyStopIteration();
+			}};
+	}
+	public static IPyIterator<Integer> toIntegerPyIterator(Integer[] s){
+		return new IPyIterator<Integer>()
+		{
+			private int idx=0;
+			@Override
+			public Integer next() throws PyStopIteration{
+				if(idx<s.length) {
+					return s[idx++];
+				}
+				throw new PyStopIteration();
+			}};
+	}
+	public static IPyIterator<Integer> toIntegerPyIterator(short[] s){
+		return new IPyIterator<Integer>()
+		{
+			private int idx=0;
+			@Override
+			public Integer next() throws PyStopIteration{
+				if(idx<s.length) {
+					return Integer.valueOf(s[idx++]);
+				}
+				throw new PyStopIteration();
+			}};
+	}
+	public static IPyIterator<Integer> toIntegerPyIterator(Short[] s){
+		return new IPyIterator<Integer>()
+		{
+			private int idx=0;
+			@Override
+			public Integer next() throws PyStopIteration{
+				if(idx<s.length) {
+					return Integer.valueOf(s[idx++]);
+				}
+				throw new PyStopIteration();
+			}};
+	}
+	public static IPyIterator<Integer> toIntegerPyIterator(byte[] s){
+		return new IPyIterator<Integer>()
+		{
+			private int idx=0;
+			@Override
+			public Integer next() throws PyStopIteration{
+				if(idx<s.length) {
+					return 0xff & s[idx++];
+				}
+				throw new PyStopIteration();
+			}};
+	}
+	public static IPyIterator<Integer> toIntegerPyIterator(Byte[] s){
+		return new IPyIterator<Integer>()
+		{
+			private int idx=0;
+			@Override
+			public Integer next() throws PyStopIteration{
+				if(idx<s.length) {
+					return 0xff & s[idx++];
+				}
+				throw new PyStopIteration();
+			}};
+	}
 
+	public static IPyIterator<Double> toDoublePyIterator(Double[] s){
+		return new IPyIterator<Double>()
+		{
+			private int idx=0;
+			@Override
+			public Double next() throws PyStopIteration{
+				if(idx<s.length) {
+					return s[idx++];
+				}
+				throw new PyStopIteration();
+			}};
+	}
+	public static IPyIterator<Double> toDoublePyIterator(double[] s){
+		return new IPyIterator<Double>()
+		{
+			private int idx=0;
+			@Override
+			public Double next() throws PyStopIteration{
+				if(idx<s.length) {
+					return Double.valueOf(s[idx++]);
+				}
+				throw new PyStopIteration();
+			}};
+	}
 
+	public static IPyIterator<Double> toDoublePyIterator(Float[] s){
+		return new IPyIterator<Double>()
+		{
+			private int idx=0;
+			@Override
+			public Double next() throws PyStopIteration{
+				if(idx<s.length) {
+					return Double.valueOf(s[idx++]);
+				}
+				throw new PyStopIteration();
+			}};
+	}
+	public static IPyIterator<Double> toDoublePyIterator(float[] s){
+		return new IPyIterator<Double>()
+		{
+			private int idx=0;
+			@Override
+			public Double next() throws PyStopIteration{
+				if(idx<s.length) {
+					return Double.valueOf(s[idx++]);
+				}
+				throw new PyStopIteration();
+			}};
+	}
 
+	
+	@SuppressWarnings("unchecked")
+	static public <T> IPyIterator<T> toPyIterator(Iterable<T> s)
+    {
+        if ((s instanceof IPyIterator))
+        {
+            return (IPyIterator<T>) s;
+        }
+        return new PyIterator<T>(s);
+    }	
+	
+	
+	
+	
 
     public static byte[] toPrimitiveByteArray(List<Byte> s) {
     	var r=new byte[s.size()];
@@ -209,15 +343,19 @@ public class compatibility
     		r[i]=s.get(i);
     	}
     	return r;
-    }    
-    public static double[] toPrimitiveDoubleArray(List<Double> s) {
-    	var r=new double[s.size()];
-    	for(int i=0;i<s.size();i++) {
-    		r[i]=s.get(i);
+    }
+    public static byte[] toPrimitiveByteArray(Iterable<Byte> s) {
+    	var t=new ArrayList<Byte>();
+    	for(var i:s) {
+    		t.add(i);
+    	}
+    	var r=new byte[t.size()];
+    	for(var i=0;i<r.length;i++) {
+    		r[i]=t.get(i);
     	}
     	return r;
-    }    
-
+    }
+        
     public static byte[] toPrimitiveArray(Byte[] s) {
     	var r=new byte[s.length];
     	for(int i=0;i<s.length;i++) {
@@ -225,6 +363,34 @@ public class compatibility
     	}
     	return r;
     }
+    
+    public static double[] toPrimitiveDoubleArray(List<Double> s) {
+    	var r=new double[s.size()];
+    	for(int i=0;i<s.size();i++) {
+    		r[i]=s.get(i);
+    	}
+    	return r;
+    }
+    public static double[] toPrimitiveDoubleArray(Iterable<Double> s) {
+    	var t=new ArrayList<Double>();
+    	for(var i:s) {
+    		t.add(i);
+    	}
+    	var r=new double[t.size()];
+    	for(var i=0;i<r.length;i++) {
+    		r[i]=t.get(i);
+    	}
+    	return r;
+    }     
+    public static double[] toPrimitiveDoubleArray(Double[] s) {
+    	var r=new double[s.length];
+    	for(int i=0;i<s.length;i++) {
+    		r[i]=s[i];
+    	}
+    	return r;
+    }
+    
+
     public static Byte[] fromPrimitiveByteArray(byte[] s) {
     	var r=new Byte[s.length];
     	for(int i=0;i<s.length;i++) {
@@ -232,13 +398,7 @@ public class compatibility
     	}
     	return r;
     }
-    public static double[] toPrimitiveArray(double[] s) {
-    	var r=new double[s.length];
-    	for(int i=0;i<s.length;i++) {
-    		r[i]=s[i];
-    	}
-    	return r;
-    }
+
     public static Double[] fromPrimitiveDoubleArray(double[] s) {
     	var r=new Double[s.length];
     	for(int i=0;i<s.length;i++) {
@@ -292,15 +452,6 @@ public class compatibility
 
 
 
-        @SuppressWarnings("unchecked")
-		static public <T> IPyIterator<T> toPyIter(Iterable<T> s)
-        {
-            if ((s instanceof IPyIterator))
-            {
-                return (IPyIterator<T>) s;
-            }
-            return new PyIterator<T>(s);
-        }
 
 
         @SafeVarargs

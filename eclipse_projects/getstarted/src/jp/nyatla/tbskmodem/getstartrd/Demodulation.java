@@ -2,14 +2,14 @@ package jp.nyatla.tbskmodem.getstartrd;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import jp.nyatla.kokolink.protocol.tbsk.tbskmodem.TbskDemodulator;
-import jp.nyatla.kokolink.protocol.tbsk.toneblock.XPskSinTone;
+import jp.nyatla.tbskmodem.TbskDemodulator;
+import jp.nyatla.tbskmodem.TbskTone;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableException;
 import jp.nyatla.kokolink.utils.wavefile.PcmData;
 public class Demodulation {
 	public static void main(String[] args)
 	{
-		var tone = new XPskSinTone(10, 10);
+		var tone = TbskTone.createXPskSin(10, 10);
 		var demod = new TbskDemodulator(tone);
 		PcmData pcm = null;
         try (FileInputStream input= new FileInputStream("./modulate.wav")) {

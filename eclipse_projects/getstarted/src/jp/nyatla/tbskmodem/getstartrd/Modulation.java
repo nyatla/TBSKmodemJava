@@ -4,14 +4,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import jp.nyatla.kokolink.protocol.tbsk.tbskmodem.TbskModulator;
-import jp.nyatla.kokolink.protocol.tbsk.toneblock.XPskSinTone;
+import jp.nyatla.tbskmodem.TbskModulator;
+import jp.nyatla.tbskmodem.TbskTone;
+import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.utils.wavefile.PcmData;
 public class Modulation {
 	public static void main(String[] args)
 	{
-		var tone = new XPskSinTone(10, 10).mul(0.5);
-		//var tone = new SinTone(10, 10).Mul(0.5);
+		var tone = TbskTone.createXPskSin(10, 10).mul(0.5);
 		var payload = new ArrayList<Integer>();
 		for (int i = 0; i < 1; i++)
 		{
@@ -29,7 +29,7 @@ public class Modulation {
 		}
 
         try (FileOutputStream output= new FileOutputStream("./modulate.wav")) {
-		    var pcm=new PcmData(src_pcm.toArray(new Double[0]),16, carrier);
+		    var pcm=new PcmData(new PyIterator<Double>(src_pcm),16, carrier);
 		    PcmData.dump(pcm,output);
         } catch (IOException e) {
             e.printStackTrace();

@@ -26,10 +26,6 @@ public class SinTone extends TraitTone{
         return d2;
 
     }
-    public SinTone(int points)
-    {
-    	this(points,1);
-    }
     public SinTone(int points,int cycle) {
     	super(SinTone._constructor_init(points,cycle));
     }

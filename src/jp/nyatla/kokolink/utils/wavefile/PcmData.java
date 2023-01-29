@@ -9,8 +9,8 @@ import java.util.List;
 import jp.nyatla.kokolink.compatibility;
 import jp.nyatla.kokolink.compatibility.IBinaryReader;
 import jp.nyatla.kokolink.compatibility.IBinaryWriter;
-import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.wavefile.riffio.Chunk;
 import jp.nyatla.kokolink.utils.wavefile.riffio.WaveFile;
 
@@ -85,24 +85,18 @@ public class PcmData
 
 
 
-    public PcmData(double[] src, int sample_bits, int frame_rate) {
-    	this(compatibility.fromPrimitiveDoubleArray(src),sample_bits,frame_rate,null);
-    }
-    public PcmData(double[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
-    	this(compatibility.fromPrimitiveDoubleArray(src),sample_bits,frame_rate,chunks);
-    }
-    public PcmData(Double[] src, int sample_bits, int frame_rate) {
+    public PcmData(IPyIterator<Double> src, int sample_bits, int frame_rate) {
         this(src,sample_bits,frame_rate,null);
     }
-    public PcmData(Double[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
+    public PcmData(IPyIterator<Double> src, int sample_bits, int frame_rate, List<Chunk> chunks) {
         this._wavfile=new WaveFile(
-        		frame_rate,
-        		sample_bits / 8,
-        		1,
-        		float2bytes(new PyIterator<Double>(src),sample_bits),
-        		chunks);
+    		frame_rate,
+    		sample_bits / 8,
+    		1,
+    		float2bytes(src,sample_bits),
+    		chunks);
     }
-
+    
 
     // """サンプリングビット数
     // """
@@ -173,7 +167,7 @@ public class PcmData
 
 
 
-    static public Byte[] float2bytes(PyIterator<Double> fdata, int bits)
+    static public Byte[] float2bytes(IPyIterator<Double> fdata, int bits)
     {
         var ret = new ArrayList<Byte>();
         if (bits == 8)
@@ -217,7 +211,7 @@ public class PcmData
         throw new RuntimeException("Invalid bits");
     }
     static Byte[] float2bytes(Double[] fdata, int bits) {
-    	PyIterator<Double> a=new PyIterator<Double>(fdata);
+    	IPyIterator<Double> a=compatibility.toDoublePyIterator(fdata);
     	
         return float2bytes(a, bits);
     }

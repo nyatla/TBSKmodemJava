@@ -48,13 +48,6 @@ public class XPskSinTone extends TraitTone{
         }
         return d;
     }
-    public XPskSinTone(int points) {
-    	this(points,1,8,null);
-    }
-    public XPskSinTone(int points,int cycle)
-    {
-    	this(points,cycle,8,null);
-    }
     
     public XPskSinTone(int points,int cycle,int div, IPyIterator<Integer> shift) {
     	super(_constructor_init(points, cycle, div, shift));

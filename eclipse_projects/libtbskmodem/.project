@@ -18,7 +18,13 @@
 		<link>
 			<name>src</name>
 			<type>2</type>
-			<location>D:/project.public/TBSKmodemJava/src</location>
+			<locationURI>SRC_PATH</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>SRC_PATH</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D/src</value>
+		</variable>
+	</variableList>
 </projectDescription>

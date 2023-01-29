@@ -24,11 +24,6 @@ public class Py__class__{
     {
 
         private Iterator<T> _src;
-        public PyIterator(T[] src)
-        {
-            this._src = Arrays.asList(src). iterator();
-        }
-
         public PyIterator(Iterable<T> src)
         {
             this._src = src.iterator();
@@ -60,7 +55,7 @@ public class Py__class__{
         @SafeVarargs
 		public IterChain(IPyIterator<T> ... src)
         {
-            this._src = new PyIterator<IPyIterator<T>>(src);
+            this._src = new PyIterator<IPyIterator<T>>(Arrays.asList(src));
             this._current = null;
         }
         public T next() throws PyStopIteration
