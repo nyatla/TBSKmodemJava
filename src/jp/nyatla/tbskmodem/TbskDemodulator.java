@@ -11,7 +11,6 @@ import jp.nyatla.kokolink.protocol.tbsk.preamble.Preamble;
 import jp.nyatla.kokolink.protocol.tbsk.tbskmodem.TbskDemodulator_impl;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.TraitTone;
 import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
-import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableException;
@@ -70,7 +69,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     
     public Iterable<Integer> demodulateAsBit(Iterable<Double> src) throws RecoverableException{
-    	return TbskIterable.createInstance(super.demodulateAsBit(new PyIterator<Double>(src)));
+    	return TbskIterable.createInstance(super.demodulateAsBit(compatibility.toPyIterator(src)));
     }
     
     
@@ -107,7 +106,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<Integer> demodulateAsInt(Iterable<Double> src, int bitwidth) throws RecoverableException
     {
-        return this.demodulateAsInt(new PyIterator<Double>(src), bitwidth);
+        return this.demodulateAsInt(compatibility.toPyIterator(src), bitwidth);
     }
     public class DemodulateAsByteAS extends AsyncDemodulateX<Byte>
     {
@@ -135,7 +134,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<Byte> demodulateAsBytes(Iterable<Double> src) throws RecoverableException
     {
-        return this.demodulateAsBytes(new PyIterator<Double>(src));
+        return this.demodulateAsBytes(compatibility.toPyIterator(src));
     }
 
 
@@ -176,7 +175,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<Character> demodulateAsStr(Iterable<Double> src, String encoding) throws RecoverableException
     {
-        return this.demodulateAsStr(new PyIterator<Double>(src), encoding);
+        return this.demodulateAsStr(compatibility.toPyIterator(src), encoding);
     }
 
 
@@ -204,7 +203,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<String> demodulateAsHexStr(Iterable<Double> src) throws RecoverableException
     {
-        return this.demodulateAsHexStr(new PyIterator<Double>(src));
+        return this.demodulateAsHexStr(compatibility.toPyIterator(src));
     }
     public Iterable<String> demodulateAsHexStr(double[] src) throws RecoverableException
     {

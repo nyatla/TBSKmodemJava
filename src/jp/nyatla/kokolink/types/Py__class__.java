@@ -28,12 +28,6 @@ public class Py__class__{
         {
             this._src = src.iterator();
         }
-
-        public PyIterator(Iterator<T> src)
-        {
-            this._src = src;
-
-        }
         @Override
         public T next() throws PyStopIteration
         {

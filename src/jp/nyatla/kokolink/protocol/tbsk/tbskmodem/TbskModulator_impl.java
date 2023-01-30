@@ -1,7 +1,6 @@
 package jp.nyatla.kokolink.protocol.tbsk.tbskmodem;
 
 
-import jp.nyatla.kokolink.compatibility.TbskIterable;
 import jp.nyatla.kokolink.interfaces.IBitStream;
 import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.protocol.tbsk.preamble.Preamble;

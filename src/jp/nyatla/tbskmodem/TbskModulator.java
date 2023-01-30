@@ -9,7 +9,6 @@ import jp.nyatla.kokolink.streams.ByteStream;
 import jp.nyatla.kokolink.compatibility;
 import jp.nyatla.kokolink.compatibility.TbskIterable;
 import jp.nyatla.kokolink.streams.RoStream;
-import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
 public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.TbskModulator_impl
@@ -24,7 +23,7 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     public Iterable<Double> modulateAsBit(Iterable<Integer> src)
     {
     	@SuppressWarnings("unchecked")
-		IPyIterator<Integer> s=(src instanceof IPyIterator)?(IPyIterator<Integer>)src:new PyIterator<Integer>(src);
+		IPyIterator<Integer> s=(src instanceof IPyIterator)?(IPyIterator<Integer>)src:compatibility.toPyIterator(src);
         return TbskIterable.<Double>createInstance(
     		super.modulateAsBit(s)
     	);

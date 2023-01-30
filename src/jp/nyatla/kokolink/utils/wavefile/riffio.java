@@ -127,7 +127,9 @@ public class riffio
     	public RiffHeader(IBinaryReader fp) throws IOException
     	{
         	super(fp);
-            assert(this.getName()=="RIFF");
+            if(this.getName().compareTo("RIFF")!=0) {
+            	throw new IOException("Invalid RIFF header");
+            }
         }
         public RiffHeader(int size,String  form) {
         	super("RIFF", size, form);
@@ -137,12 +139,6 @@ public class riffio
     {
     	final private int _payload;
     	final private int _payload_len;
-    	public RawListChunk(IBinaryReader fp) throws IOException {
-    		super(fp);
-            assert(this.getName()=="LIST");
-            this._payload_len=this.getSize() - 4;
-            this._payload=this._buf.writeBytes(fp,this._payload_len);
-    	}
 	    public RawListChunk(int size, IBinaryReader fp) throws IOException {
 	    	super("LIST", size, fp);
             this._payload_len=this.getSize() - 4;

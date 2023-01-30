@@ -101,7 +101,7 @@ public class PcmData
     // """サンプリングビット数
     // """
 
-    int getSampleBits()
+    public int getSampleBits()
     {
         return this._wavfile.getFmt().getSamplewidth();
     }

@@ -2,7 +2,6 @@ package jp.nyatla.kokolink.protocol.tbsk.tbskmodem;
 
 import java.util.function.Function;
 
-import jp.nyatla.kokolink.compatibility.TbskIterable;
 import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.protocol.tbsk.preamble.CoffPreamble;
 import jp.nyatla.kokolink.protocol.tbsk.preamble.Preamble;

@@ -66,7 +66,7 @@ public class rostreams
 	                throw e;
 	            }
 	        }
-	        assert(r.size()<maxsize);
+	        assert(r.size()<=maxsize);
 	        var ret=new ArrayList<T>();
 	        while(r.size()>0){
 	        	var w=r.poll();

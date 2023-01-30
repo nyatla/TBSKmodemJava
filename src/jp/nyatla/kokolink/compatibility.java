@@ -99,7 +99,7 @@ public class compatibility
 	    	return r;
 	    }
 	    public String asStr(int idx,int size) {
-	    	var s=this.subList(idx, size);
+	    	var s=this.subList(idx,idx+size);
 	    	byte[] b=new byte[s.size()];
 	    	for(int i=0;i<s.size();i++){
 	    		b[i]=s.get(i);
@@ -321,7 +321,18 @@ public class compatibility
 				throw new PyStopIteration();
 			}};
 	}
-
+	public static IPyIterator<Double> toDoublePyIterator(Iterable<Float> s){
+		var iter=s.iterator();
+		return new IPyIterator<Double>()
+		{
+			@Override
+			public Double next() throws PyStopIteration{
+				if(iter.hasNext()) {
+					return Double.valueOf(iter.next());
+				}
+				throw new PyStopIteration();
+			}};
+	}
 	
 	@SuppressWarnings("unchecked")
 	static public <T> IPyIterator<T> toPyIterator(Iterable<T> s)
