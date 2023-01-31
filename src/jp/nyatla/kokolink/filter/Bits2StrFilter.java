@@ -1,8 +1,10 @@
 package jp.nyatla.kokolink.filter;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 
 import jp.nyatla.kokolink.interfaces.IFilter;
 import jp.nyatla.kokolink.interfaces.IRoStream;
@@ -10,6 +12,7 @@ import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.BitsWidthConvertIterator;
+import jp.nyatla.kokolink.utils.BrokenTextStreamDecoder;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 
 // """ nBit intイテレータから1バイト単位のbytesを返すフィルタです。
@@ -18,9 +21,8 @@ public class Bits2StrFilter extends BasicRoStream<Character > implements IFilter
 {
     private int _pos;
     private int _input_bits;
-    private String _encoding;
-    private List<Byte> _savedata;
     private IPyIterator<Integer> _iter;
+    private BrokenTextStreamDecoder _decoder;
     public Bits2StrFilter() {
     	this(1,"utf-8");
     }
@@ -29,8 +31,8 @@ public class Bits2StrFilter extends BasicRoStream<Character > implements IFilter
     {
     	super();
         this._input_bits = input_bits;
-        this._encoding = encoding;
-        this._savedata = new ArrayList<Byte>();
+        this._decoder=new BrokenTextStreamDecoder(encoding);
+
     }
     @Override
     public Bits2StrFilter setInput(IRoStream<Integer> src)
@@ -39,6 +41,7 @@ public class Bits2StrFilter extends BasicRoStream<Character > implements IFilter
         this._iter = src == null ? null : new BitsWidthConvertIterator(src, this._input_bits, 8);
         return this;
     }
+
     @Override
     public Character next() throws PyStopIteration
     {
@@ -46,33 +49,26 @@ public class Bits2StrFilter extends BasicRoStream<Character > implements IFilter
         {
             throw new PyStopIteration();
         }
-        while (true)
+        try
         {
-            int d;
-            try
-            {
-                d = this._iter.next();
-            }
-            catch (RecoverableStopIteration e)
-            {
-                throw e;
-            }
-            this._savedata.add((byte)d);
-            try
-            {
-            	byte[] a=new byte[this._savedata.size()];
-            	for(var i=0;i<a.length;i++) {
-            		a[i]=this._savedata.get(i);
-            	}
-                var r = new String(a,this._encoding);// System.Text.Encoding.GetEncoding(this._encoding,new EncoderExceptionFallback(),new DecoderExceptionFallback()).GetChars(this._savedata.ToArray());
-                this._savedata.clear();
-                return r.charAt(0);
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                continue;
-            }
+        	while(true) {
+                var r=this._decoder.update(this._iter.next().byteValue());
+        		if(r!=null) {
+        			return r;
+        		}
+        	}
         }
+        catch (RecoverableStopIteration e)
+        {
+            throw e;
+        }catch(PyStopIteration e) {
+        	var r=this._decoder.update();
+        	if(r==null) {
+        		throw e;
+        	}
+        	return r;
+        }
+
     }
     @Override
     public long getPos()

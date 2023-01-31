@@ -76,11 +76,11 @@ public class TbskDemodulator extends TbskDemodulator_impl
     //    """ TBSK信号からnビットのint値配列を復元します。
     //        関数は信号を検知する迄制御を返しません。信号を検知せずにストリームが終了した場合はNoneを返します。
     //    """
-    public class DemodulateAsIntAS extends AsyncDemodulateX<Integer>
+    public class DemodulateAsIntAS extends AsyncDemodulateX<TbskIterable<Integer>>
     {
         public DemodulateAsIntAS(TbskDemodulator_impl parent, IPyIterator<Double> src, int bitwidth)
         {
-            super(parent, src, arg ->new BitsWidthFilter(1, bitwidth).setInput(arg));
+            super(parent, src, arg ->compatibility.TbskIterable.createInstance((new BitsWidthFilter(1, bitwidth).setInput(arg))));
         }
     }    
     public Iterable<Integer> demodulateAsInt(IPyIterator<Double> src) throws RecoverableException{
@@ -92,7 +92,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
         DemodulateAsIntAS asmethod = new DemodulateAsIntAS(this, src, bitwidth);
         if (asmethod.run())
         {
-            return TbskIterable.createInstance(asmethod.getResult());
+            return asmethod.getResult();
         }
         else
         {
@@ -108,10 +108,10 @@ public class TbskDemodulator extends TbskDemodulator_impl
     {
         return this.demodulateAsInt(compatibility.toPyIterator(src), bitwidth);
     }
-    public class DemodulateAsByteAS extends AsyncDemodulateX<Byte>
+    public class DemodulateAsByteAS extends AsyncDemodulateX<TbskIterable<Byte>>
     {
         public DemodulateAsByteAS(TbskDemodulator_impl parent, IPyIterator<Double> src) {
-            super(parent, src, arg -> new Bits2BytesFilter(1).setInput(arg));
+            super(parent, src, arg -> compatibility.TbskIterable.createInstance(new Bits2BytesFilter(1).setInput(arg)));
         }
     }
     //    """ TBSK信号からバイト単位でbytesを返します。
@@ -124,7 +124,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
         DemodulateAsByteAS asmethod = new DemodulateAsByteAS(this, src);
         if (asmethod.run())
         {
-            return TbskIterable.createInstance(asmethod.getResult());
+            return asmethod.getResult();
         }
         else
         {
@@ -139,7 +139,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
 
 
 
-    public class DemodulateAsStrAS extends AsyncDemodulateX<Character>
+    public class DemodulateAsStrAS extends AsyncDemodulateX<TbskIterable<Character>>
     {
         public DemodulateAsStrAS(TbskDemodulator_impl parent, IPyIterator<Double> src)
         {
@@ -147,7 +147,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
         }
         public DemodulateAsStrAS(TbskDemodulator_impl parent, IPyIterator<Double> src, String encoding)
         {
-            super(parent, src, arg ->  new Bits2StrFilter(1,encoding).setInput(arg));
+            super(parent, src, arg ->  compatibility.TbskIterable.createInstance(new Bits2StrFilter(1,encoding).setInput(arg)));
         }
     }
     
@@ -162,7 +162,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
         DemodulateAsStrAS asmethod = new DemodulateAsStrAS(this, src, encoding);
         if (asmethod.run())
         {
-            return TbskIterable.createInstance(asmethod.getResult());
+            return asmethod.getResult();
         }
         else
         {
@@ -179,10 +179,10 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
 
 
-    public class DemodulateAsHexStrAS extends AsyncDemodulateX<String>
+    public class DemodulateAsHexStrAS extends AsyncDemodulateX<TbskIterable<String>>
     {
         public DemodulateAsHexStrAS(TbskDemodulator_impl parent, IPyIterator<Double> src) {
-        	super(parent, src, arg -> new Bits2HexStrFilter(1).setInput(arg));
+        	super(parent, src, arg -> compatibility.TbskIterable.createInstance(new Bits2HexStrFilter(1).setInput(arg)));
         }
     }
 
@@ -193,7 +193,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
         DemodulateAsHexStrAS asmethod = new DemodulateAsHexStrAS(this, src);
         if (asmethod.run())
         {
-            return TbskIterable.createInstance(asmethod.getResult());
+            return asmethod.getResult();
         }
         else
         {

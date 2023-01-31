@@ -54,7 +54,7 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     }
     public Iterable<Double> modulate(Iterable<Integer> src, int bitwidth)
     {
-    	return this.modulate(src,bitwidth);
+    	return this.modulate(compatibility.toPyIterator(src),bitwidth);
     }
     public Iterable<Double> modulate(Iterable<Integer> src)
     {

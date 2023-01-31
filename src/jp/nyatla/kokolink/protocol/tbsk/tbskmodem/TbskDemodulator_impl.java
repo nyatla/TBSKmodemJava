@@ -20,11 +20,11 @@ public class TbskDemodulator_impl
 
 
 
-    public class AsyncDemodulateX<T> extends AsyncMethod<IPyIterator<T>>
+    public class AsyncDemodulateX<T> extends AsyncMethod<T>
     {
 
 
-        public AsyncDemodulateX(TbskDemodulator_impl parent, IPyIterator<Double> src, Function<TraitBlockDecoder,IPyIterator<T>> resultbuilder) 
+        public AsyncDemodulateX(TbskDemodulator_impl parent, IPyIterator<Double> src, Function<TraitBlockDecoder,T> resultbuilder) 
         {
             this._tone_ticks = parent._tone.size();
             this._result = null;
@@ -38,7 +38,7 @@ public class TbskDemodulator_impl
 
         }
         @Override
-        public IPyIterator<T> getResult()
+        public T getResult()
         {
             assert(this._co_step >= 4);
             return this._result;
@@ -67,7 +67,7 @@ public class TbskDemodulator_impl
             }
 
         }
-        private Function<TraitBlockDecoder, IPyIterator<T>> _resultbuilder;
+        private Function<TraitBlockDecoder, T> _resultbuilder;
         private boolean _closed;
         private int _tone_ticks;
         private CoffPreamble.WaitForSymbolAS _wsrex;
@@ -75,7 +75,7 @@ public class TbskDemodulator_impl
         private IRoStream<Double> _stream;
         private TbskDemodulator_impl _parent;
         private int _co_step;
-        private IPyIterator<T> _result;
+        private T _result;
         @Override
         public boolean run()
         {
@@ -166,7 +166,7 @@ public class TbskDemodulator_impl
         this._pa_detector = preamble != null ? preamble : new CoffPreamble(tone, 1.0,4);
         this._asmethod_lock = false;
     }
-    public class DemodulateAsBitAS extends AsyncDemodulateX<Integer>
+    public class DemodulateAsBitAS extends AsyncDemodulateX<IPyIterator<Integer>>
     {
         public DemodulateAsBitAS(TbskDemodulator_impl parent, IPyIterator<Double> src)
         {            	
