@@ -61,10 +61,12 @@ public class BrokenTextStreamDecoder
 
 
 	/**
-	 * バッファの先頭から文字コードを構成する文字数を返す。
+	 * 先頭から文字コードを構成する文字数を返す。
 	 * @return
-	 * 0の場合文字コードは存在しない。-1の場合、文字コードは存在しない。
-	 */
+	 * 0	解析キューが空<br/>
+	 * -1	解析キューの文字コードは存在しない。<br/>
+	 * n	文字コードの長さ	<br/>
+	 */	
 	public int test()
 	{
 		if(this._len==0) {
@@ -81,7 +83,8 @@ public class BrokenTextStreamDecoder
 	/**
 	 * バッファに文字を追記してから、先頭から文字コードを構成する文字数を返す。
 	 * @return
-	 * 0の場合文字コードは存在しない。-1の場合、文字コードは存在しない。
+	 * -1	解析キューの文字コードは存在しない。<br/>
+	 * n	文字コードの長さ	<br/>
 	 */	
 	public int test(byte d)
 	{
@@ -98,10 +101,12 @@ public class BrokenTextStreamDecoder
 	}
 
 	/**
-	 * 新規入力をともなうアップデート
+	 * 新規入力をともなうアップデート.
+	 * キューがいっぱいの場合は、先頭1バイトを"?"と仮定して出力します。
 	 * @param d
 	 * @return
-	 * 変換不能ならnull
+	 * char	変換した文字<br/>
+	 * null	変換できない<br/>
 	 */
 	public Character update(byte d)
 	{
@@ -122,9 +127,10 @@ public class BrokenTextStreamDecoder
 		}
 	}
 	/**
-	 * 新規入力のないアップデート
+	 * 新規入力のないアップデート。キューの内容が変換できない場合は'?'を返す。
 	 * @return
-	 * 変換不能ならnull.nullなら終端。
+	 * null	解析キューにデータが無い<br/>
+	 * char	変換した文字コード<br/>
 	 */
 	public Character update()
 	{
