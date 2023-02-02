@@ -11,6 +11,7 @@ public class TraitTone extends ArrayList<Double>{
     {
     	super();
     	for(var i:d) {
+    		assert(i*i<=1);//最大値チェック
     		this.add(i);
     	}
     }
@@ -19,7 +20,9 @@ public class TraitTone extends ArrayList<Double>{
     public TraitTone mul(double v){
         for (var i = 0; i < this.size(); i++)
         {
-            this.set(i,this.get(i) * v);
+        	var n=this.get(i) * v;
+        	assert(n*n<=1);//最大値チェック
+            this.set(i,n);
         }
         return this;
     }
