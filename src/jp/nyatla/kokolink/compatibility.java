@@ -375,24 +375,22 @@ public class compatibility
     	return r;
     }
     
-    public static double[] toPrimitiveDoubleArray(List<Double> s) {
-    	var r=new double[s.size()];
-    	for(int i=0;i<s.size();i++) {
-    		r[i]=s.get(i);
-    	}
-    	return r;
-    }
+
+
     public static double[] toPrimitiveDoubleArray(Iterable<Double> s) {
+    	return toPrimitiveDoubleArray(s.iterator());
+    }
+    public static double[] toPrimitiveDoubleArray(Iterator<Double> s) {
     	var t=new ArrayList<Double>();
-    	for(var i:s) {
-    		t.add(i);
+    	while(s.hasNext()) {
+    		t.add(s.next());
     	}
     	var r=new double[t.size()];
     	for(var i=0;i<r.length;i++) {
     		r[i]=t.get(i);
     	}
     	return r;
-    }     
+    }    
     public static double[] toPrimitiveDoubleArray(Double[] s) {
     	var r=new double[s.length];
     	for(int i=0;i<s.length;i++) {

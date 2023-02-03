@@ -3,7 +3,6 @@ package jp.nyatla.kokolink.utils.math.corrcoef;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import jp.nyatla.kokolink.interfaces.IRecoverableIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
@@ -16,12 +15,14 @@ import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 // from ....types import Deque, Iterable, Iterator
 // from ...recoverable import RecoverableIterator, RecoverableStopIteration
 
-// """ src[:]とsrc[shift:]の相関を返すストリームです。
-//     n番目に区間[n,n+window]と[n+shift,n+shift+window]の相関値を返します。
-//     開始からwindow-shift個の要素は0になります。
-// """
-
-public class SelfCorrcoefIterator implements IRecoverableIterator<Double>
+/**
+ * src[:]とsrc[shift:]の相関を返すストリームです。
+ * n番目に区間[n,n+window]と[n+shift,n+shift+window]の相関値を返します。
+ * 開始からwindow-shift個の要素は0になります。
+ * 
+ * この関数は蓄積誤差があります。
+ */
+public class SelfCorrcoefIterator implements ISelfCorrcoefIterator
 {
     private double[][] xyi;
     private int c;
@@ -34,10 +35,8 @@ public class SelfCorrcoefIterator implements IRecoverableIterator<Double>
     private IPyIterator<Double> _srcx;
     private Queue<Double> _srcy;
 
-    public SelfCorrcoefIterator(int window, IPyIterator<Double> src)
-    {
-    	this(window,src,0);
-    }
+
+
     public SelfCorrcoefIterator(int window, IPyIterator<Double> src, int shift)
     {
 

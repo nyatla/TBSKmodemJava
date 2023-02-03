@@ -11,6 +11,7 @@ import jp.nyatla.kokolink.utils.BufferedIterator;
 import jp.nyatla.kokolink.utils.RingBuffer;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableException;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
+import jp.nyatla.kokolink.utils.math.corrcoef.ISelfCorrcoefIterator;
 import jp.nyatla.kokolink.utils.math.corrcoef.SelfCorrcoefIterator;
 import jp.nyatla.kokolink.protocol.tbsk.traitblockcoder.TraitBlockEncoder;
 import jp.nyatla.kokolink.streams.BitStream;
@@ -107,7 +108,7 @@ public class CoffPreamble implements Preamble
             var cofbuf_len = symbol_ticks * (6 + parent._cycle * 2);
             //# cofbuf_len=symbol_ticks*10
             this._parent = parent;
-            this._cof = new BufferedIterator<Double>(new SelfCorrcoefIterator(symbol_ticks, src, symbol_ticks), cofbuf_len, 0.);
+            this._cof = new BufferedIterator<Double>(ISelfCorrcoefIterator.createNormalized(symbol_ticks, src, symbol_ticks), cofbuf_len, 0.);
             this._avi = new AverageInterator(this._cof, symbol_ticks);
             var sample_width = parent._cycle + 1;
             //# rb=RingBuffer(symbol_ticks*3,0)

@@ -1,6 +1,5 @@
 # TBSKmodem for Java
 
-Japanese documente 👉[Readme.ja.md](Readme.ja.md)
 
 This is processing implementation of TBSKmodem.
 🐓[TBSKmodem](https://github.com/nyatla/TBSKmodem/)

@@ -15,7 +15,7 @@ import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.utils.AverageInterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
-import jp.nyatla.kokolink.utils.math.corrcoef.SelfCorrcoefIterator;
+import jp.nyatla.kokolink.utils.math.corrcoef.ISelfCorrcoefIterator;
 
 public class traitblockcoder
 {
@@ -102,7 +102,7 @@ public class traitblockcoder
         private boolean _is_eos;
         private int _pos;
         private List<Double> _samples;
-        private SelfCorrcoefIterator _cof;
+        private ISelfCorrcoefIterator _cof;
         private double _last_data;
         private int _preload_size;
         private int _block_skip_size;
@@ -133,7 +133,7 @@ public class traitblockcoder
             else
             {
                 this._is_eos = false;
-                this._cof = new SelfCorrcoefIterator(this._trait_block_ticks, src, this._trait_block_ticks);
+                this._cof = ISelfCorrcoefIterator.createNormalized(this._trait_block_ticks, src, this._trait_block_ticks);
                 var ave_window = Math.max((int)(this._trait_block_ticks * 0.1), 2);// #検出用の平均フィルタは0.1*len(tone)//2だけずれてる。個々を直したらtbskmodem#TbskModulatorも直せ
                 this._avefilter = new AverageInterator(this._cof, ave_window);
                 this._last_data = 0;

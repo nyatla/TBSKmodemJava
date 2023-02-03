@@ -8,10 +8,11 @@ package jp.nyatla.kokolink.utils.math;
 public class Rms{
 	private int[] _buf;
 	private int _ptr;
-	private int _sum;
+	private long _sum;
+	private static int FP=30;
 	public Rms(int length)
 	{
-		assert(length<0x7fffffff);	//31bitまで
+		assert(length<(1<<FP));	//31bitまで
 		this._buf=new int[length];
 		this._ptr=0;
 		this._sum=0;
@@ -21,7 +22,7 @@ public class Rms{
 	}
 	public Rms update(double d) {
 		double v=d>1?1:(d<-1?-1:d);//1から-1に正規化
-		int iv=(int)Math.round(v*v*0x7ffffff);//31bit int
+		int iv=(int)Math.round(v*v*(1<<FP));//31bit int
 		int[] buf=this._buf;
 		this._sum=this._sum+iv-buf[this._ptr]; //Σx^2
 		buf[this._ptr]=iv;
@@ -30,6 +31,6 @@ public class Rms{
 	}
 	public double getLastRms() {
 		//√(Σx^2/0x7fffffff/n)
-		return Math.sqrt((double)this._sum/0x7fffffff/this._buf.length);
+		return Math.sqrt((double)this._sum/(1<<FP)/this._buf.length);
 	}
 }
