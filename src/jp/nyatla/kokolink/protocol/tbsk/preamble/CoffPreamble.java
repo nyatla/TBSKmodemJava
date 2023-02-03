@@ -52,7 +52,13 @@ public class CoffPreamble implements Preamble
             // # return enc.setInput(BitStream([0,1,1,1,1,0,1,0,0,1],1))
         }
 
-    }	
+    }
+    @Override
+    public int getNumberOfTicks() {
+    	//2+cycle+1+cycle+3
+    	int c=this._cycle;
+        return (2+c+1+c+3)*this._symbol.size();
+    }
 	
 	
     private double _threshold;
