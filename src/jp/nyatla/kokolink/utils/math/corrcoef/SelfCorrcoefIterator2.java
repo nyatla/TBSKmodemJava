@@ -122,28 +122,28 @@ public class SelfCorrcoefIterator2 implements ISelfCorrcoefIterator
             return 1.;
         }
 
-        var sumxi = ((double)this.sumxi)/(1<<FP);
-        var meanx_ = ((double)(sumxi / (this.n)))/(1<<FP);
-        var sumxi2 = ((double)this.sumxi2)/(1<<FP);
-        var v = (sumxi2 + (meanx_ * meanx_) * this.n - 2 * meanx_ * sumxi);
+        var sumxi_ = ((double)this.sumxi)/(1<<FP);
+        var meanx_ = sumxi_ / (this.n);
+        var sumxi2_ = ((double)this.sumxi2)/(1<<FP);
+        var v = (sumxi2_ + (meanx_ * meanx_) * this.n - 2 * meanx_ * sumxi_);
         if (v < 0)
         {
             v = 0;
         }
         var stdx = Math.sqrt(v / (this.n - 1));
 
-        var sumyi = ((double)this.sumyi)/(1<<FP);
-        var meany_ =((double)(sumyi / (this.n)))/(1<<FP);
-        var sumyi2 = ((double)this.sumyi2)/(1<<FP);
-        v = (sumyi2 + (meany_ * meany_) * this.n - 2 * meany_ * sumyi);
+        var sumyi_ = ((double)this.sumyi)/(1<<FP);
+        var meany_ =sumyi_ / (this.n);
+        var sumyi2_ = ((double)this.sumyi2)/(1<<FP);
+        v = (sumyi2_ + (meany_ * meany_) * this.n - 2 * meany_ * sumyi_);
         if (v < 0)
         {
             v = 0;
         }
         var stdy = Math.sqrt(v / (this.n - 1));
 
-        var sumxiyi=((double)(this.sumxiyi))/(1<<FP);
-        v = sumxiyi + this.n * meanx_ * meany_ - meany_ * sumxi - meanx_ * sumyi;
+        var sumxiyi_=((double)(this.sumxiyi))/(1<<FP);
+        v = sumxiyi_ + this.n * meanx_ * meany_ - meany_ * sumxi_ - meanx_ * sumyi_;
         var covxy = v / (this.n - 1);
         var r = stdx * stdy == 0 ? 0 : covxy / (stdx * stdy);
         return r > 1 ? 1f : (r < -1 ? -1 : r);

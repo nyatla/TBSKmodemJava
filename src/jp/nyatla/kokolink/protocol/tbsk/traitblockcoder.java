@@ -220,7 +220,7 @@ public class traitblockcoder
                 this._samples.clear();
 
                 // # print(self._src.pos,r)
-                var th=this._threshold;
+                var th=this._threshold;//相関閾値                
                 this._pos=this._pos+1;
                 if(r>th){
                     // # print(1,1)
