@@ -1,6 +1,7 @@
 package jp.nyatla.tbskmodem;
 
 import jp.nyatla.kokolink.compatibility;
+import jp.nyatla.kokolink.compatibility.Functions;
 import jp.nyatla.kokolink.compatibility.TbskIterable;
 import jp.nyatla.kokolink.filter.Bits2BytesFilter;
 import jp.nyatla.kokolink.filter.Bits2StrFilter;
@@ -69,7 +70,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     
     public Iterable<Integer> demodulateAsBit(Iterable<Double> src) throws RecoverableException{
-    	return TbskIterable.createInstance(super.demodulateAsBit(compatibility.toPyIterator(src)));
+    	return TbskIterable.createInstance(super.demodulateAsBit(Functions.toPyIterator(src)));
     }
     
     
@@ -106,7 +107,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<Integer> demodulateAsInt(Iterable<Double> src, int bitwidth) throws RecoverableException
     {
-        return this.demodulateAsInt(compatibility.toPyIterator(src), bitwidth);
+        return this.demodulateAsInt(Functions.toPyIterator(src), bitwidth);
     }
     public class DemodulateAsByteAS extends AsyncDemodulateX<TbskIterable<Byte>>
     {
@@ -134,7 +135,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<Byte> demodulateAsBytes(Iterable<Double> src) throws RecoverableException
     {
-        return this.demodulateAsBytes(compatibility.toPyIterator(src));
+        return this.demodulateAsBytes(Functions.toPyIterator(src));
     }
 
 
@@ -175,7 +176,7 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<Character> demodulateAsStr(Iterable<Double> src, String encoding) throws RecoverableException
     {
-        return this.demodulateAsStr(compatibility.toPyIterator(src), encoding);
+        return this.demodulateAsStr(Functions.toPyIterator(src), encoding);
     }
 
 
@@ -203,14 +204,14 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     public Iterable<String> demodulateAsHexStr(Iterable<Double> src) throws RecoverableException
     {
-        return this.demodulateAsHexStr(compatibility.toPyIterator(src));
+        return this.demodulateAsHexStr(Functions.toPyIterator(src));
     }
     public Iterable<String> demodulateAsHexStr(double[] src) throws RecoverableException
     {
-        return this.demodulateAsHexStr(compatibility.toDoublePyIterator(src));
+        return this.demodulateAsHexStr(Functions.toDoublePyIterator(src));
     }
     public Iterable<String> demodulateAsHexStr(Double[] src, String encoding) throws RecoverableException
     {
-        return this.demodulateAsHexStr(compatibility.toDoublePyIterator(src));
+        return this.demodulateAsHexStr(Functions.toDoublePyIterator(src));
     }    
 }

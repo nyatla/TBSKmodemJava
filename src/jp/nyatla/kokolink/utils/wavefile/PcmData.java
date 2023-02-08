@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.nyatla.kokolink.compatibility;
+import jp.nyatla.kokolink.compatibility.Functions;
 import jp.nyatla.kokolink.compatibility.IBinaryReader;
 import jp.nyatla.kokolink.compatibility.IBinaryWriter;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
@@ -26,20 +26,9 @@ public class PcmData
     	var io=new IBinaryReader() {
 			@Override
 			public Byte[] readBytes(int size) throws IOException {
-				return compatibility.fromPrimitiveByteArray(src.readNBytes(size));
+				return Functions.fromPrimitiveByteArray(src.readNBytes(size));
 			}
-
-			@Override
-			public int readInt32LE() throws IOException {
-				byte[] b=src.readNBytes(4);
-				return (int)(((0xff&b[3]) << 24) | ((0xff&b[2]) << 16) | ((0xff&b[1]) << 8) | (0xff & b[0]));
-			}
-
-			@Override
-			public int readInt16LE() throws IOException {
-				byte[] b=src.readNBytes(2);
-				return (int)((0xff&b[1]) << 8) | (0xff&b[0]);
-			}};    	
+		};    	
         return new PcmData(io);
     }
 
@@ -53,7 +42,7 @@ public class PcmData
     	var io=new IBinaryWriter() {
 			@Override
 			public int writeBytes(List<Byte> buf) throws IOException {
-				dest.write(compatibility.toPrimitiveByteArray(buf));
+				dest.write(Functions.toPrimitiveByteArray(buf));
 				return buf.size();
 			}
 
@@ -80,7 +69,7 @@ public class PcmData
     	this(src,sample_bits,frame_rate,null);
     }
     public PcmData(byte[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
-        this._wavfile=new WaveFile(frame_rate, sample_bits/8, 1,compatibility.fromPrimitiveByteArray(src), chunks);
+        this._wavfile=new WaveFile(frame_rate, sample_bits/8, 1,Functions.fromPrimitiveByteArray(src), chunks);
     }
 
 
@@ -211,7 +200,7 @@ public class PcmData
         throw new RuntimeException("Invalid bits");
     }
     static Byte[] float2bytes(Double[] fdata, int bits) {
-    	IPyIterator<Double> a=compatibility.toDoublePyIterator(fdata);
+    	IPyIterator<Double> a=Functions.toDoublePyIterator(fdata);
     	
         return float2bytes(a, bits);
     }

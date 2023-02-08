@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.nyatla.kokolink.compatibility;
+import jp.nyatla.kokolink.compatibility.Functions;
 import jp.nyatla.kokolink.compatibility.IBinaryReader;
 import jp.nyatla.kokolink.compatibility.IBinaryWriter;
 import jp.nyatla.kokolink.compatibility.MemBuffer;
@@ -83,12 +83,12 @@ public class riffio
 	        return this._buf.asInt16LE(2+8);
 	    }
 	
-	    int getFramerate()
+	    public int getFramerate()
 	    {
 	        return this._buf.asInt32LE(4+8);
 	    }
 	
-	    int getSamplewidth()
+	    public int getSamplewidth()
 	    {
 	        return this._buf.asInt16LE(14+8);
 	    }		
@@ -166,7 +166,7 @@ public class riffio
     	    {    	    	
     	    	String name;
     	    	try {
-    	        	name=new String(compatibility.toPrimitiveArray(fp.readBytes(4)));
+    	        	name=new String(Functions.toPrimitiveArray(fp.readBytes(4)));
     	        }
     	        catch (Exception e) {
     	            break;

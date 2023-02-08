@@ -6,7 +6,7 @@ import jp.nyatla.kokolink.filter.BitsWidthFilter;
 import jp.nyatla.kokolink.protocol.tbsk.preamble.Preamble;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.TraitTone;
 import jp.nyatla.kokolink.streams.ByteStream;
-import jp.nyatla.kokolink.compatibility;
+import jp.nyatla.kokolink.compatibility.Functions;
 import jp.nyatla.kokolink.compatibility.TbskIterable;
 import jp.nyatla.kokolink.streams.RoStream;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
@@ -23,7 +23,7 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     public Iterable<Double> modulateAsBit(Iterable<Integer> src)
     {
     	@SuppressWarnings("unchecked")
-		IPyIterator<Integer> s=(src instanceof IPyIterator)?(IPyIterator<Integer>)src:compatibility.toPyIterator(src);
+		IPyIterator<Integer> s=(src instanceof IPyIterator)?(IPyIterator<Integer>)src:Functions.toPyIterator(src);
         return TbskIterable.<Double>createInstance(
     		super.modulateAsBit(s)
     	);
@@ -31,13 +31,13 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     public Iterable<Double> modulateAsBit(Integer[] src)
     {
     	return TbskIterable.<Double>createInstance(
-    		super.modulateAsBit(compatibility.toIntegerPyIterator(src))
+    		super.modulateAsBit(Functions.toIntegerPyIterator(src))
     	);
     }
     public Iterable<Double> modulateAsBit(int[] src)
     {
     	return TbskIterable.<Double>createInstance(
-    		super.modulateAsBit(compatibility.toIntegerPyIterator(src))
+    		super.modulateAsBit(Functions.toIntegerPyIterator(src))
     	);
     }
 
@@ -54,7 +54,7 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     }
     public Iterable<Double> modulate(Iterable<Integer> src, int bitwidth)
     {
-    	return this.modulate(compatibility.toPyIterator(src),bitwidth);
+    	return this.modulate(Functions.toPyIterator(src),bitwidth);
     }
     public Iterable<Double> modulate(Iterable<Integer> src)
     {
@@ -78,7 +78,7 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
         //既にIPyIteratorを持っていたらそのまま使う。
     	return TbskIterable.<Double>createInstance(
         this.modulateAsBit(
-            new BitsWidthFilter(8,1).setInput(new ByteStream(new ByteStream.ByteCastIter(compatibility.toPyIterator(src))))
+            new BitsWidthFilter(8,1).setInput(new ByteStream(new ByteStream.ByteCastIter(Functions.toPyIterator(src))))
         ));
     }    
     
