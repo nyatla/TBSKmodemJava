@@ -11,6 +11,7 @@ import jp.nyatla.kokolink.compatibility.IBinaryReader;
 import jp.nyatla.kokolink.compatibility.IBinaryWriter;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
+import jp.nyatla.kokolink.utils.FloatConverter;
 import jp.nyatla.kokolink.utils.wavefile.riffio.Chunk;
 import jp.nyatla.kokolink.utils.wavefile.riffio.WaveFile;
 
@@ -69,7 +70,7 @@ public class PcmData
     	this(src,sample_bits,frame_rate,null);
     }
     public PcmData(byte[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
-        this._wavfile=new WaveFile(frame_rate, sample_bits/8, 1,Functions.fromPrimitiveByteArray(src), chunks);
+    	this(Functions.fromPrimitiveByteArray(src),sample_bits,frame_rate,chunks);
     }
 
 
@@ -78,12 +79,7 @@ public class PcmData
         this(src,sample_bits,frame_rate,null);
     }
     public PcmData(IPyIterator<Double> src, int sample_bits, int frame_rate, List<Chunk> chunks) {
-        this._wavfile=new WaveFile(
-    		frame_rate,
-    		sample_bits / 8,
-    		1,
-    		float2bytes(src,sample_bits),
-    		chunks);
+    	this(float2bytes(src,sample_bits),sample_bits,frame_rate,chunks);
     }
     
 
@@ -115,44 +111,37 @@ public class PcmData
 
     public List<Double> dataAsFloat()
     {
-        var data = this._wavfile.getData().getData();
-        var bits = this.getSampleBits();
+        assert(this._wavfile.getData()!= null);
+        var src = this._wavfile.getData().getData();
+        var num_of_sample = src.size();
+        assert(num_of_sample % (this.getSampleBits() / 8) == 0);
 
-        var ret = new ArrayList<Double>();
-        if (bits == 8) {
-            for (var i = 0;i < data.size();i++) {
-                ret.add(((int)(data.get(i)& 0xff)) / 255. - 0.5);
-            }
-            return ret;
-        }
-        else if (bits == 16) {
-        	int data_size=data.size();
-            if (data_size % 2 != 0) {
-                data_size = data_size - 1;
-            }
-            //TBSK_ASSERT(data_size%2==0);
-            double r = (Math.pow(2, 16) - 1) / 2;//(2 * *16 - 1)//2 #Daisukeパッチ
-            int c = 0;
-            int b = 0;
-            for (var i :data)
+        var ret=new ArrayList<Double>();
+        if (this.getSampleBits() == 8)
+        {
+            for(var i : src)
             {
-                b = (int)(((b >> 8)&0xff) | (0xff&i) << 8);
-                c = (c + 1) % 2;
-                if (c == 0) {
-                    if ((0x8000 & b) == 0) {
-                        ret.add(b / r);
-                    }
-                    else
-                    {
-                        ret.add(((b - 0x0000ffff) - 1) / r);
-                    }
-                    b = 0;
-                }
+                ret.add(FloatConverter.byteToDouble(i));
             }
-            return ret;
+
+        }else if (this.getSampleBits() == 16)
+        {
+            for (var i=0;i<num_of_sample;i+=2)
+            {
+            	int a=((int)(src.get(i)&0xff) | ((int)(src.get(i+1)&0xff) << 8));
+            	short v=(short)(a&0xffff);
+                ret.add(FloatConverter.int16ToDouble(v));
+            }
         }
-        throw new RuntimeException("invalid bits");
-    }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
+        return ret;
+    }    
+    
+
+
 
 
 
@@ -199,11 +188,7 @@ public class PcmData
         }
         throw new RuntimeException("Invalid bits");
     }
-    static Byte[] float2bytes(Double[] fdata, int bits) {
-    	IPyIterator<Double> a=Functions.toDoublePyIterator(fdata);
-    	
-        return float2bytes(a, bits);
-    }
+ 
 
 
 

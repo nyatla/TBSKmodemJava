@@ -70,7 +70,8 @@ public class TbskDemodulator extends TbskDemodulator_impl
     }
     
     public Iterable<Integer> demodulateAsBit(Iterable<Double> src) throws RecoverableException{
-    	return TbskIterable.createInstance(super.demodulateAsBit(Functions.toPyIterator(src)));
+    	var w=super.demodulateAsBit(Functions.toPyIterator(src));
+    	return w==null?null:TbskIterable.createInstance(w);
     }
     
     

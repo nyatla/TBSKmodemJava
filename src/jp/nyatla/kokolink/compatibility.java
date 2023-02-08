@@ -202,6 +202,7 @@ public class compatibility
 			return this._iter;
 		}
 		public static <T> TbskIterable<T> createInstance(IPyIterator<T> src) {
+			assert(src!=null);
 			return new TbskIterable<T>(new PyIterSuorceIterator<T>(src));
 		}		
 	}

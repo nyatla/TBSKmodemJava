@@ -24,21 +24,18 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     {
     	@SuppressWarnings("unchecked")
 		IPyIterator<Integer> s=(src instanceof IPyIterator)?(IPyIterator<Integer>)src:Functions.toPyIterator(src);
-        return TbskIterable.<Double>createInstance(
-    		super.modulateAsBit(s)
-    	);
+    	var w=super.modulateAsBit(s);
+        return w==null?null:TbskIterable.<Double>createInstance(w);
     }
     public Iterable<Double> modulateAsBit(Integer[] src)
     {
-    	return TbskIterable.<Double>createInstance(
-    		super.modulateAsBit(Functions.toIntegerPyIterator(src))
-    	);
+		var w=super.modulateAsBit(Functions.toIntegerPyIterator(src));
+    	return w==null?null:TbskIterable.<Double>createInstance(w);
     }
     public Iterable<Double> modulateAsBit(int[] src)
     {
-    	return TbskIterable.<Double>createInstance(
-    		super.modulateAsBit(Functions.toIntegerPyIterator(src))
-    	);
+    	var w=super.modulateAsBit(Functions.toIntegerPyIterator(src));
+    	return w==null?null:TbskIterable.<Double>createInstance(w);
     }
 
 
@@ -46,11 +43,8 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     public Iterable<Double> modulate(IPyIterator<Integer> src, int bitwidth)
     {
         //既にIPyIteratorを持っていたらそのまま使う。
-        return TbskIterable.<Double>createInstance(
-        	this.modulateAsBit(
-        		new BitsWidthFilter(bitwidth,1).setInput(new RoStream<Integer>(src))
-        		)
-        	);
+    	var w=this.modulateAsBit(new BitsWidthFilter(bitwidth,1).setInput(new RoStream<Integer>(src)));
+        return w==null?null:TbskIterable.<Double>createInstance(w);
     }
     public Iterable<Double> modulate(Iterable<Integer> src, int bitwidth)
     {
@@ -67,19 +61,15 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     }
     public Iterable<Double> modulate(String src,String encoding) throws UnsupportedEncodingException
     {
-    	return TbskIterable.<Double>createInstance(
-    		this.modulateAsBit(
-            new BitsWidthFilter(8,1).setInput(new ByteStream(src,0,encoding))
-            ));
+    	var w=this.modulateAsBit(new BitsWidthFilter(8,1).setInput(new ByteStream(src,0,encoding)));
+    	return w==null?null:TbskIterable.<Double>createInstance(w);
     }
 
     public Iterable<Double> modulateAsByte(Iterable<Byte> src)
     {
         //既にIPyIteratorを持っていたらそのまま使う。
-    	return TbskIterable.<Double>createInstance(
-        this.modulateAsBit(
-            new BitsWidthFilter(8,1).setInput(new ByteStream(new ByteStream.ByteCastIter(Functions.toPyIterator(src))))
-        ));
+        var w=this.modulateAsBit(new BitsWidthFilter(8,1).setInput(new ByteStream(new ByteStream.ByteCastIter(Functions.toPyIterator(src)))));
+    	return w==null?null:TbskIterable.<Double>createInstance(w);
     }    
     
     public Iterable<Double> modulateAsHexStr(String src)
