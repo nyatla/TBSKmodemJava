@@ -107,9 +107,13 @@ public class PcmData
     {
         return this._wavfile.getData().getSize();
     }
+    public List<Byte> getData()
+    {
+        return this._wavfile.getData().getData();
+    }
 
 
-    public List<Double> dataAsFloat()
+    public List<Double> getDataAsDouble()
     {
         assert(this._wavfile.getData()!= null);
         var src = this._wavfile.getData().getData();
@@ -145,7 +149,7 @@ public class PcmData
 
 
 
-    static public Byte[] float2bytes(IPyIterator<Double> fdata, int bits)
+    static private Byte[] float2bytes(IPyIterator<Double> fdata, int bits)
     {
         var ret = new ArrayList<Byte>();
         if (bits == 8)

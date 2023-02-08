@@ -19,7 +19,7 @@ public class Demodulation {
         }
 
         try{
-    		var ret=demod.demodulateAsBit(pcm.dataAsFloat());
+    		var ret=demod.demodulateAsBit(pcm.getDataAsDouble());
     		if (ret == null)
     		{
     			System.out.print("None");
