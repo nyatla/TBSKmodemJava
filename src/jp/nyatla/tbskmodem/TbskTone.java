@@ -47,5 +47,9 @@ public class TbskTone{
     {
     	return new MSeqTone(new MSequence(bits, tap), base_tone);
     }    
+    public static TraitTone createCustom(Iterable<Double> d)
+    {
+    	return new TraitTone(d);
+    }    
     
 }
