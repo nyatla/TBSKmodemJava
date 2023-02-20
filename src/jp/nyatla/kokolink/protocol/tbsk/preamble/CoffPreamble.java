@@ -7,9 +7,9 @@ import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.protocol.tbsk.AlgorithmSwitch;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.TraitTone;
 import jp.nyatla.kokolink.utils.AsyncMethod;
-import jp.nyatla.kokolink.utils.AverageInterator;
 import jp.nyatla.kokolink.utils.BufferedIterator;
 import jp.nyatla.kokolink.utils.RingBuffer;
+import jp.nyatla.kokolink.utils.math.AverageIterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableException;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 import jp.nyatla.kokolink.protocol.tbsk.traitblockcoder.TraitBlockEncoder;
@@ -87,7 +87,7 @@ public class CoffPreamble implements Preamble
     public class WaitForSymbolAS extends AsyncMethod<Integer>{
         private CoffPreamble _parent;
         private BufferedIterator<Double> _cof;
-        private AverageInterator _avi;
+        private AverageIterator _avi;
         private int _sample_width;
         private int _cofbuf_len;
         private int _symbol_ticks;
@@ -108,7 +108,7 @@ public class CoffPreamble implements Preamble
             //# cofbuf_len=symbol_ticks*10
             this._parent = parent;
             this._cof = new BufferedIterator<Double>(AlgorithmSwitch.createSelfCorrcoefIterator(symbol_ticks, src, symbol_ticks), cofbuf_len, 0.);
-            this._avi = new AverageInterator(this._cof, symbol_ticks);
+            this._avi = new AverageIterator(this._cof, symbol_ticks);
             var sample_width = parent._cycle + 1;
             //# rb=RingBuffer(symbol_ticks*3,0)
             this._sample_width = sample_width;

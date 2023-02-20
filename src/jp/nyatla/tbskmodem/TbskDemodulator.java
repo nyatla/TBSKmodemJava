@@ -8,6 +8,7 @@ import jp.nyatla.kokolink.filter.Bits2StrFilter;
 import jp.nyatla.kokolink.filter.BitsWidthFilter;
 import jp.nyatla.kokolink.interfaces.IFilter;
 import jp.nyatla.kokolink.interfaces.IRoStream;
+import jp.nyatla.kokolink.protocol.tbsk.preamble.CoffPreamble;
 import jp.nyatla.kokolink.protocol.tbsk.preamble.Preamble;
 import jp.nyatla.kokolink.protocol.tbsk.tbskmodem.TbskDemodulator_impl;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.TraitTone;
@@ -64,6 +65,10 @@ public class TbskDemodulator extends TbskDemodulator_impl
     {
     	super(tone,null);
     }
+    public TbskDemodulator(TraitTone tone, double preamble_th, int preamble_cycle)
+    {
+    	super(tone,new CoffPreamble(tone,preamble_th,preamble_cycle));
+    }    
     public TbskDemodulator(TraitTone tone, Preamble preamble)
     {
     	super(tone,preamble);

@@ -13,8 +13,8 @@ import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.TraitTone;
 import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
-import jp.nyatla.kokolink.utils.AverageInterator;
 import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
+import jp.nyatla.kokolink.utils.math.AverageIterator;
 import jp.nyatla.kokolink.utils.math.corrcoef.ISelfCorrcoefIterator;
 
 public class traitblockcoder
@@ -97,7 +97,7 @@ public class traitblockcoder
     public static class TraitBlockDecoder extends BasicRoStream<Integer> implements IBitStream,IDecoder<TraitBlockDecoder,IRoStream<Double>,Integer>
     {
         private int _trait_block_ticks;
-        private AverageInterator _avefilter;
+        private AverageIterator _avefilter;
         private double _threshold;
         private boolean _is_eos;
         private int _pos;
@@ -135,7 +135,7 @@ public class traitblockcoder
                 this._is_eos = false;
                 this._cof = AlgorithmSwitch.createSelfCorrcoefIterator(this._trait_block_ticks, src, this._trait_block_ticks);
                 var ave_window = Math.max((int)(this._trait_block_ticks * 0.1), 2);// #検出用の平均フィルタは0.1*len(tone)//2だけずれてる。個々を直したらtbskmodem#TbskModulatorも直せ
-                this._avefilter = new AverageInterator(this._cof, ave_window);
+                this._avefilter = new AverageIterator(this._cof, ave_window);
                 this._last_data = 0;
 
                 this._preload_size = this._trait_block_ticks + ave_window / 2 - 1;    //#平均値フィルタの初期化サイズ。ave_window/2足してるのは、平均値の遅延分.

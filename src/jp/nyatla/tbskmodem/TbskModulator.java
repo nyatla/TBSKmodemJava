@@ -3,6 +3,7 @@ package jp.nyatla.tbskmodem;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import jp.nyatla.kokolink.filter.BitsWidthFilter;
+import jp.nyatla.kokolink.protocol.tbsk.preamble.CoffPreamble;
 import jp.nyatla.kokolink.protocol.tbsk.preamble.Preamble;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.TraitTone;
 import jp.nyatla.kokolink.streams.ByteStream;
@@ -40,6 +41,9 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
     public TbskModulator(TraitTone tone) {
     	this(tone,TbskPreamble.createCoff(tone));
     }
+    public TbskModulator(TraitTone tone, int preamble_cycle) {
+    	super(tone, new CoffPreamble(tone,CoffPreamble.DEFAULT_TH,preamble_cycle));
+    }    
 	public TbskModulator(TraitTone tone, Preamble preamble)
     {
     	super(tone,preamble);

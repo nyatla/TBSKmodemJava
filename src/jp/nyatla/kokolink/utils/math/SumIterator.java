@@ -1,8 +1,9 @@
-package jp.nyatla.kokolink.utils;
+package jp.nyatla.kokolink.utils.math;
 
 
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
+import jp.nyatla.kokolink.utils.RingBuffer;
 import jp.nyatla.kokolink.utils.recoverable.BasicRecoverableIterator;
 
 // """ ストリームの読み出し位置から過去N個の合計を返すイテレータです。
