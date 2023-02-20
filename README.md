@@ -9,7 +9,6 @@ TBSK (Trait Block Shift Keying) modem is a low-speed, short-range audio communic
 
 It can modulate a byte/bitstream to PCM  and demodulate PCM to a byte/bitstream.
 
-There is a library for development and a console script [tbskmodem](tbskmodem.md).
 
 ![preview_tbsk](https://user-images.githubusercontent.com/2483108/194768184-cecddff0-1fa4-4df8-af3f-f16ed4ef1718.gif)
 
@@ -30,5 +29,5 @@ This library is MIT licensed open source software, but not patent free.
 ## GetStarted
 
 ### Setup
-Soon
+Soooon
 

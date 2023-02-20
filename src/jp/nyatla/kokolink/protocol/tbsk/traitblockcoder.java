@@ -133,7 +133,7 @@ public class traitblockcoder
             else
             {
                 this._is_eos = false;
-                this._cof = ISelfCorrcoefIterator.createNormalized(this._trait_block_ticks, src, this._trait_block_ticks);
+                this._cof = AlgorithmSwitch.createSelfCorrcoefIterator(this._trait_block_ticks, src, this._trait_block_ticks);
                 var ave_window = Math.max((int)(this._trait_block_ticks * 0.1), 2);// #検出用の平均フィルタは0.1*len(tone)//2だけずれてる。個々を直したらtbskmodem#TbskModulatorも直せ
                 this._avefilter = new AverageInterator(this._cof, ave_window);
                 this._last_data = 0;

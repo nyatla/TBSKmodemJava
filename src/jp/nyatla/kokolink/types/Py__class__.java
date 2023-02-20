@@ -1,7 +1,7 @@
 package jp.nyatla.kokolink.types;
 
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
@@ -46,10 +46,10 @@ public class Py__class__{
     {
         private IPyIterator<IPyIterator<T>> _src;
         private IPyIterator<T> _current;
-        @SafeVarargs
-		public IterChain(IPyIterator<T> ... src)
+
+		public IterChain(List<IPyIterator<T>> src)
         {
-            this._src = new PyIterator<IPyIterator<T>>(Arrays.asList(src));
+            this._src = new PyIterator<IPyIterator<T>>(src);
             this._current = null;
         }
         public T next() throws PyStopIteration

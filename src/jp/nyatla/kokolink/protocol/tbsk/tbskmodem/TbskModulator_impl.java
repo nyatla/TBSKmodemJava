@@ -1,6 +1,8 @@
 package jp.nyatla.kokolink.protocol.tbsk.tbskmodem;
 
 
+import java.util.ArrayList;
+
 import jp.nyatla.kokolink.interfaces.IBitStream;
 import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.protocol.tbsk.preamble.Preamble;
@@ -75,7 +77,7 @@ public class TbskModulator_impl
 
 
 
-    private TraitTone _tone;
+    protected TraitTone _tone;
     private Preamble _preamble;
     private TraitBlockEncoder _enc;
     public TbskModulator_impl(TraitTone tone, Preamble preamble)
@@ -89,13 +91,19 @@ public class TbskModulator_impl
         this._preamble = preamble;
         this._enc = new TraitBlockEncoder(tone);
     }
-    public IPyIterator<Double> modulateAsBit(IPyIterator<Integer> src)
+    public IPyIterator<Double> modulateAsBit(IPyIterator<Integer> src,IPyIterator<Double> suffix,boolean suffix_pad)
     {
         var ave_window_shift = Math.max((int)(this._tone.size() * 0.1), 2) / 2; //#検出用の平均フィルタは0.1*len(tone)//2だけずれてる。ここを直したらTraitBlockDecoderも直せ
-        return new IterChain<Double>(
-            this._preamble.getPreamble(),
-            this._enc.setInput(new DiffBitEncoder(0, new BitStream(src, 1))),
-            new Repeater<Double>(0., ave_window_shift)    //#demodulatorが平均値で補正してる関係で遅延分を足してる。
-        );
+        var l=new ArrayList<IPyIterator<Double>>();
+        
+        l.add(this._preamble.getPreamble());
+        l.add(this._enc.setInput(new DiffBitEncoder(0, new BitStream(src, 1))));
+        if(suffix!=null) {
+        	l.add(suffix);
+        }
+        if(suffix_pad) {
+        	l.add(new Repeater<Double>(0., ave_window_shift));
+        }
+        return new IterChain<Double>(l);
     }
 }
