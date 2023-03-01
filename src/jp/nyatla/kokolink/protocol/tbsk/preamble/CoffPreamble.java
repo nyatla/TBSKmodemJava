@@ -275,7 +275,7 @@ public class CoffPreamble implements Preamble
                         var b = new ArrayList<PcTuple>();
                         for (var i = 0; i < buf.size() - 2; i++)
                         {
-                            b.add(new PcTuple(i + this._nor - symbol_ticks + 1, buf.get(i) + buf.get(i + 1) + buf.get(2)));
+                            b.add(new PcTuple(i + this._nor - symbol_ticks + 1, buf.get(i) + buf.get(i + 1) + buf.get(i+2)));
                         }
 //	                    b.sort(new IComparator (a, b) => a.Item2 == b.Item2 ? 0 : (a.Item2 < b.Item2 ? 1 : -1));
                         b.sort(new Comparator<PcTuple>(){
