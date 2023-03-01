@@ -2,6 +2,8 @@ package jp.nyatla.kokolink.protocol.tbsk.preamble;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+
+import jp.nyatla.kokolink.compatibility;
 import jp.nyatla.kokolink.compatibility.Functions;
 import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.protocol.tbsk.AlgorithmSwitch;
@@ -270,7 +272,8 @@ public class CoffPreamble implements Preamble
                         //# #ピーク周辺の読出し
                         //# [next(cof) for _ in range(symbol_ticks//4)]
                         //# バッファリングしておいた相関値に3値平均フィルタ
-                        var buf = cof.getBuf().sublist(cof.getBuf().getLength() -symbol_ticks, symbol_ticks);//buf = cof.buf[-symbol_ticks:]
+                        var buf=Functions.toList(cof.getBuf().subIter(cof.getBuf().getLength() -symbol_ticks, symbol_ticks));                        
+
                         //var b =[(i + self._nor - symbol_ticks + 1, buf[i] + buf[i + 1] + buf[2]) for i in range(len(buf) - 2)];// #位置,相関値
                         var b = new ArrayList<PcTuple>();
                         for (var i = 0; i < buf.size() - 2; i++)
@@ -291,7 +294,8 @@ public class CoffPreamble implements Preamble
                         //# Lレベルシンボルの範囲を得る
                         //# s=peak_pos-symbol_ticks*3-(self._nor-cofbuf_len)
                         var s = peak_pos - symbol_ticks * sample_width - (this._nor - cofbuf_len);
-                        var lw = cof.getBuf().sublist(s, cycle * symbol_ticks);
+                        var lw = Functions.toList(cof.getBuf().subIter(s, cycle * symbol_ticks));
+
 //                        Array.Sort(lw);//cof.buf[s: s + cycle * symbol_ticks]
                         Functions.sort(lw);
                         //lw = lw.subList(0,lw.size() * 3 / 2 + 1); //lw[:len(lw) * 3 / 2 + 1];
@@ -304,7 +308,8 @@ public class CoffPreamble implements Preamble
                         //#Hレベルシンボルの範囲を得る
                         //# s=peak_pos-symbol_ticks*6-(self._nor-cofbuf_len)
                         s = peak_pos - symbol_ticks * sample_width * 2 - (this._nor - cofbuf_len);
-                        var lh = cof.getBuf().sublist(s, cycle * symbol_ticks);
+                        var lh = Functions.toList(cof.getBuf().subIter(s, cycle * symbol_ticks));
+
 //                        Array.Sort(lh);
 //                        Array.Reverse(lh);
                         Functions.sort(lh,true);

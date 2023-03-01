@@ -3,6 +3,9 @@ package jp.nyatla.kokolink.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
+import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
+
 
 
 
@@ -45,54 +48,33 @@ public class RingBuffer<T>
             this.append(i);
         }
     }
-    /** リストの一部を切り取って返します。
-        この関数はバッファの再配置を行いません。
-    */    
-    public List<T> sublist(int pos,int size){
-        var l=this._buf.size();
-        if(pos>=0){
-            var p=this._p+pos;
-            if(size>=0){
-                assert(pos+size<=l);
-                var ret=new ArrayList<T>(size);
-                for(var i=0;i<size;i++){
-                    ret.add(i,this._buf.get((p+i)%l));
-//                    ret[i]=this._buf[(p+i)%l];
-                }
-                return ret;
-            }else{
-                assert(pos+size+1>=0);
-                var ret=new ArrayList<T>(-size);
-                // return tuple([self._buf[(p+size+i+1)%l] for i in range(-size)])
-                for(var i=0;i<-size;i++){
-                    ret.add(i,this._buf.get((p+size+i+1)%l));
-//                    ret[i]=this._buf[(p+size+i+1)%l];
-                }
-                return ret;
-            }
-        }else{
-            var p=this._p+l+pos;
-            if(size>=0){
-                assert(l+pos+size<=l);
-                // return tuple([self._buf[(p+i)%l] for i in range(size)])
-                var ret=new ArrayList<T>();
-                for(var i=0;i<size;i++){
-                    ret.add(i,this._buf.get((p+i)%l));
-//                    ret[i]=this._buf[(p+i)%l];
-                }
-                return ret;
-            }else{
-                assert(l+pos+size+1>=0);
-                // return tuple([self._buf[(p-i+l)%l] for i in range(-size)])
-                var ret=new ArrayList<T>(size);
-                for(var i=0;i<-size;i++){
-                    ret.add(i,this._buf.get((p-i+l)%l));
-//                    ret[i]=this._buf[(p-i+l)%l];
-                }
-                return ret;
-            }
-        }
+    public IPyIterator<T> subIter(int pos ,int size)
+    {
+    	class Iter implements IPyIterator<T>
+    	{
+    		private int _pos;
+    		private int _size;
+    		private List<T> _buf;
+    		public Iter(List<T> buf,int pos,int size)
+    		{
+    			this._buf=buf;
+    			this._pos=pos;
+    			this._size=size;
+    		}
+			@Override
+			public T next() throws PyStopIteration {
+				if(this._size==0) {
+					throw new PyStopIteration();
+				}
+                this._size = this._size - 1;
+                int p = this._pos;
+                this._pos = (this._pos + 1) % this._buf.size();
+                return this._buf.get(p);
+			}
+    	};
+    	return new Iter(this._buf,(this._p+pos)%this.getLength(),size);
     }
+
     // @property
     // def tail(self)->T:
     //     """ バッファの末尾 もっとも新しい要素"""
@@ -114,15 +96,8 @@ public class RingBuffer<T>
         return this._buf.get(this._p);
     }
 
-    // def __getitem__(self,s)->List[T]:
-    //     """ 通常のリストにして返します。
-    //         必要に応じて再配置します。再配置せずに取り出す場合はsublistを使用します。
-    //     """
-    //     b=self._buf
-    //     if self._p!=0:
-    //         self._buf= b[self._p:]+b[:self._p]
-    //     self._p=0
-    //     return self._buf[s]
+
+
     public T get(int s)
     {
         var b=this._buf;

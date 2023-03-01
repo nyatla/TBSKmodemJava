@@ -469,6 +469,17 @@ public class compatibility
 
 
 
+    	static public <T> List<T> toList(IPyIterator<T> s){
+            List<T> d = new ArrayList<T>();
+            try {
+                for(;;) {
+                	d.add(s.next());
+                }
+            }catch(PyStopIteration e) {
+            	
+            }
+            return d;    		
+    	}
 
 
         @SafeVarargs
