@@ -1,4 +1,4 @@
-# TBSK modem for C#
+# TBSK modem for Java
 
 
 English documente 👉[README.md](README.md)
