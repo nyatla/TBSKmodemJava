@@ -1,6 +1,7 @@
 package jp.nyatla.kokolink.protocol.tbsk.toneblock;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // """ Sin波形のトーン信号です。
 //     このトーン信号を使用したTBSKはDPSKと同じです。
@@ -10,7 +11,7 @@ public class SinTone extends TraitTone{
 	 * 
 	 */
 	private static final long serialVersionUID = -4237686593350268747L;
-	static private Iterable<Double> _constructor_init(int points, int cycle)
+	static private List<Double> _constructor_init(int points, int cycle)
     {
         var s = Math.PI * 2 / points * 0.5;
         var d1 = new ArrayList<Double>();

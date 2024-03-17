@@ -1,5 +1,7 @@
 package jp.nyatla.kokolink.streams;
 
+import java.util.List;
+
 import jp.nyatla.kokolink.interfaces.IBitStream;
 import jp.nyatla.kokolink.streams.rostreams.BasicRoStream;
 import jp.nyatla.kokolink.types.Py__class__.PyIterator;
@@ -14,10 +16,10 @@ public class BitStream extends BasicRoStream<Integer> implements IBitStream
     private BitsWidthConvertIterator _bw;
     // """ 任意ビット幅のintストリームを1ビット単位のビットストリームに展開します。
     // """
-    public BitStream(Iterable<Integer> src) {
+    public BitStream(PyIterator<Integer> src) {
     	this(src,8);
     }
-    public BitStream(Iterable<Integer> src, int bitwidth)
+    public BitStream(List<Integer> src, int bitwidth)
     {
     	this(new PyIterator<Integer>(src),bitwidth);
     }

@@ -1,6 +1,7 @@
 package jp.nyatla.kokolink.protocol.tbsk.toneblock;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.nyatla.kokolink.utils.math.MSequence;
 
@@ -12,8 +13,8 @@ public class MSeqTone extends TraitTone{
 	 * 
 	 */
 	private static final long serialVersionUID = 2756328812035355226L;
-	private Iterable<Integer> _sequence;
-    static private Iterable<Double> _constructor_init(MSequence mseq,TraitTone base_tone)
+	private List<Integer> _sequence;
+    static private List<Double> _constructor_init(MSequence mseq,TraitTone base_tone)
     {
         var tone = base_tone != null ? base_tone : new SinTone(20, 1);
         var a = new ArrayList<Double>();
@@ -32,7 +33,7 @@ public class MSeqTone extends TraitTone{
     };
 
 
-    public Iterable<Integer> getSequence()
+    public List<Integer> getSequence()
     {
         return this._sequence;
     }

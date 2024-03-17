@@ -27,7 +27,7 @@ public class PcmData
     	var io=new IBinaryReader() {
 			@Override
 			public Byte[] readBytes(int size) throws IOException {
-				return Functions.fromPrimitiveByteArray(src.readNBytes(size));
+				return Functions.toByteArray(src.readNBytes(size));
 			}
 		};    	
         return new PcmData(io);
@@ -70,7 +70,7 @@ public class PcmData
     	this(src,sample_bits,frame_rate,null);
     }
     public PcmData(byte[] src, int sample_bits, int frame_rate, List<Chunk> chunks) {
-    	this(Functions.fromPrimitiveByteArray(src),sample_bits,frame_rate,chunks);
+    	this(Functions.toByteArray(src),sample_bits,frame_rate,chunks);
     }
 
 

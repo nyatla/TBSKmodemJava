@@ -12,8 +12,6 @@ import jp.nyatla.kokolink.utils.recoverable.RecoverableStopIteration;
 
 
 
-// from ....types import Deque, Iterable, Iterator
-// from ...recoverable import RecoverableIterator, RecoverableStopIteration
 
 /**
  * src[:]とsrc[shift:]の相関を返すストリームです。

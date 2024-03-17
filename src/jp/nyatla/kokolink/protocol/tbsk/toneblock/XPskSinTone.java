@@ -1,6 +1,7 @@
 package jp.nyatla.kokolink.protocol.tbsk.toneblock;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
@@ -31,7 +32,7 @@ public class XPskSinTone extends TraitTone{
     //     shift   -1,0,1の3値を返すイテレータです。省略時は乱数値です。
     // """
 
-    static private Iterable<Double> _constructor_init(int points, int cycle, int div, IPyIterator<Integer> shift)
+    static private List<Double> _constructor_init(int points, int cycle, int div, IPyIterator<Integer> shift)
     {
         var delta = Math.PI * 2 / points;
         var lshift = (shift != null) ? shift:new DefaultIter();

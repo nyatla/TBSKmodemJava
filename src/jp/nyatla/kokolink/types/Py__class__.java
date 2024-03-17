@@ -82,7 +82,10 @@ public class Py__class__{
         }
 
     }
-    //  定数個の値を返すイテレータ
+    /**
+     * 定数個のT型の値を返すイテレータ。
+     * @param <T>
+     */
     static public class Repeater<T> implements IPyIterator<T>
     {
         private T _v;

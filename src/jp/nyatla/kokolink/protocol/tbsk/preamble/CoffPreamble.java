@@ -3,7 +3,6 @@ package jp.nyatla.kokolink.protocol.tbsk.preamble;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import jp.nyatla.kokolink.compatibility;
 import jp.nyatla.kokolink.compatibility.Functions;
 import jp.nyatla.kokolink.interfaces.IRoStream;
 import jp.nyatla.kokolink.protocol.tbsk.AlgorithmSwitch;

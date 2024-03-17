@@ -1,10 +1,12 @@
 package jp.nyatla.tbskmodem;
 
+import jp.nyatla.kokolink.compatibility.Functions;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.MSeqTone;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.PnTone;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.SinTone;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.TraitTone;
 import jp.nyatla.kokolink.protocol.tbsk.toneblock.XPskSinTone;
+import jp.nyatla.kokolink.types.Py__class__.Repeater;
 import jp.nyatla.kokolink.utils.math.MSequence;
 
 public class TbskTone{
@@ -32,8 +34,11 @@ public class TbskTone{
     public static PnTone createPn(int seed,int interval,TraitTone base_tone) {
     	return new PnTone(seed,interval,base_tone);
     }	
-    public static PnTone createPn(int seed) {
-    	return createPn(seed, 2,null);
+    public static PnTone createPn(int seed,int interval,int length) {
+    	return createPn(seed, interval,new TraitTone(Functions.toDoubleArray(new Repeater<Double>(1.0,length))));
+    }
+    public static PnTone createPn(int seed,int length) {
+    	return createPn(seed, 1,new TraitTone(Functions.toDoubleArray(new Repeater<Double>(1.0,length))));
     }
     
     
@@ -48,6 +53,10 @@ public class TbskTone{
     	return new MSeqTone(new MSequence(bits, tap), base_tone);
     }    
     public static TraitTone createCustom(Iterable<Double> d)
+    {
+    	return new TraitTone(Functions.toDoubleArray(d));
+    }    
+    public static TraitTone createCustom(Double[] d)
     {
     	return new TraitTone(d);
     }    

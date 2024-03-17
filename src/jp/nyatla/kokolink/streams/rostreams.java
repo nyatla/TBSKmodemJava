@@ -92,46 +92,6 @@ public class rostreams
 }
 
 
-// class FlattenRoStream(BasicRoStream[T],Generic[T]):
-//     """T型の再帰構造のIteratorを直列化するストリームです。
-//     最上位以外にあるインレータは値の取得時に全て読み出されます。
-//     T型はIterator/Iterable/Noneな要素ではないことが求められます。
-//     """
-//     def __init__(self,src:Union[Iterator[T],Iterable[T]]):
-//         super().__init__()
-//         self._pos=0
-//         def toIterator(s):
-//             if isinstance(s,Iterable):
-//                 return iter(s)
-//             else:
-//                 return s
-//         def rextends(s:Union[Iterator[T],Iterable[T]]):
-//             while True:
-//                 try:
-//                     i=next(s)
-//                 except RecoverableStopIteration:
-//                     yield None
-//                     continue
-//                 except StopIteration:
-//                     break
-//                 if isinstance(i,(Iterable,Iterator)) and not isinstance(i,(str,bytes)):
-//                     yield from rextends(toIterator(i))
-//                     continue
-//                 else:
-//                     yield i
-//                     continue
-
-//         self._gen=rextends(toIterator(src))
-//     def __next__(self):
-//         r=next(self._gen)
-//         if r is None:
-//             raise RecoverableStopIteration()
-//         self._pos+=1 #posのインクリメント
-//         return r
-//     @property
-//     def pos(self):
-//         return self._pos
-
 
 
 // class PeekRoStream(BasicRoStream[T],Generic[T]):

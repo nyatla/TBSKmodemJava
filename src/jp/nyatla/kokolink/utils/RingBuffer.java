@@ -1,6 +1,7 @@
 package jp.nyatla.kokolink.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
@@ -43,7 +44,7 @@ public class RingBuffer<T>
         return ret;
 
     }
-    public void extend(Iterable<T> v){
+    public void extend(Collection<? extends T> v){
         for (T i : v){
             this.append(i);
         }

@@ -133,7 +133,7 @@ public class compatibility
 		public boolean isRrecoveable();
 	}
 	
-//    //  IPyEnumeratorをソースにしたIEnumerator
+//    //  IPyIteratorをソースにしたIEnumerator
 //    //  MoveToはIpyIteratorの仕様を引き継いでRecoverableStopIterationをスローすることがあります。
     public static class PyIterSuorceIterator<T> implements ITbskIterator<T>
     {
@@ -185,11 +185,12 @@ public class compatibility
               return this._current;
           }
           throw new RuntimeException();
-		}        
+		}
     }
 
 	/**
-	 * 常に同じイテラブルを提供します。
+	 * ITbskIteratorをラップするイテラブルです。
+	 * 常に同じイテラブルを提供するため注意が必要です。
 	 */
 	public static class TbskIterable<T> implements Iterable<T>{
 		private ITbskIterator<T> _iter;
@@ -411,9 +412,15 @@ public class compatibility
         	}
         	return r;
         }
+        public static double[] toPrimitiveDoubleArray(IPyIterator<Double> s)
+        {
+        	//Iteratorに変換
+        	var iter=new PyIterSuorceIterator<Double>(s);
+        	return toPrimitiveDoubleArray(iter);
+        }
         
 
-        public static Byte[] fromPrimitiveByteArray(byte[] s) {
+        public static Byte[] toByteArray(byte[] s) {
         	var r=new Byte[s.length];
         	for(int i=0;i<s.length;i++) {
         		r[i]=s[i];
@@ -421,13 +428,34 @@ public class compatibility
         	return r;
         }
 
-        public static Double[] fromPrimitiveDoubleArray(double[] s) {
+        public static Double[] toDoubleArray(double[] s) {
         	var r=new Double[s.length];
         	for(int i=0;i<s.length;i++) {
         		r[i]=s[i];
         	}
         	return r;
-        }    	
+        }
+        public static Double[] toDoubleArray(Iterable<Double> s) {
+        	return toDoubleArray(s.iterator());
+        }        
+        public static Double[] toDoubleArray(Iterator<Double> s) {
+        	var t=new ArrayList<Double>();
+        	while(s.hasNext()) {
+        		t.add(s.next());
+        	}
+        	var r=new Double[t.size()];
+        	for(var i=0;i<r.length;i++) {
+        		r[i]=t.get(i);
+        	}
+        	return r;
+        }         
+        public static Double[] toDoubleArray(IPyIterator<Double> s)
+        {
+        	//Iteratorに変換
+        	var iter=new PyIterSuorceIterator<Double>(s);
+        	return toDoubleArray(iter);
+        }        
+        
     	static public Double sum(Double[] a){
     		Double s=0.;
     		for(var i:a) {

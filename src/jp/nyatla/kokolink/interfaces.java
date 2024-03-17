@@ -1,5 +1,7 @@
 package jp.nyatla.kokolink;
 
+import java.util.List;
+
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
 import jp.nyatla.kokolink.types.Py_interface__.IPyIterator;
 
@@ -22,10 +24,8 @@ public class interfaces
         //     終端に到達するとStopIterationをスローします。
         //     """
         //     pass
-        Iterable<T> gets(int size,boolean fillup) throws PyStopIteration;
-        default Iterable<T> Gets(int size) throws PyStopIteration{
-        	return this.gets(size,false);
-        }
+        List<T> gets(int size,boolean fillup) throws PyStopIteration;
+
 
         // def pos(self)->int:
         //     """ストリーム上の現在の読み出し位置です。get/getsで読み出した要素数+seekで読み出した要素数の合計です。
