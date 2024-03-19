@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import jp.nyatla.kokolink.types.Py__class__.PyIterator;
 import jp.nyatla.kokolink.types.Py__class__.PyStopIteration;
@@ -130,41 +131,45 @@ public class compatibility
 		 * hasNextがfalseの時に、継続使用の可能性を返します。
 		 * @return
 		 */
-		public boolean isRrecoveable();
+		public boolean isRecoveable();
 	}
 	
-//    //  IPyIteratorをソースにしたIEnumerator
-//    //  MoveToはIpyIteratorの仕様を引き継いでRecoverableStopIterationをスローすることがあります。
+
+	/**
+	 * Python IteratorライクなクラスをラップしてJava標準Iteratorとして動作するらっぱーです。
+	 * @author nyatla
+	 *
+	 * @param <T>
+	 */
     public static class PyIterSuorceIterator<T> implements ITbskIterator<T>
     {
-        private IPyIterator<T> _src;
+        final private IPyIterator<T> _src;
+        private boolean _has_value;
         private T _current;
         private boolean _is_recoverable;
         public PyIterSuorceIterator(IPyIterator<T> src)
         {
             assert(!(src instanceof Iterable)); //Enumulableを持たないこと
             this._src = src;
-            this._is_recoverable=false;
+            this._is_recoverable=true;
+            this._has_value=false;
         }
-        public boolean isRrecoveable()
+        public boolean isRecoveable()
         {
-            if (this._src != null && this._current!=null) {
-            	return this._is_recoverable;
-            }else {
-            	return false;
-            }
+        	return this._is_recoverable;
         }
 		@Override
 		public boolean hasNext()
 		{
             try
             {
-                var c= this._src.next();
-                if (c == null)
-                {
-                    throw new RuntimeException();
-                }
-                this._current = c;
+            	//値を持っていたら何もせずtrue
+            	if(this._has_value) {
+            		return true;
+            	}
+            	//値がなければ読出してみる。
+            	this._current= this._src.next();
+            	this._has_value=true;
                 return true;
             }
             catch (RecoverableStopIteration e)
@@ -179,12 +184,15 @@ public class compatibility
             }
         }
 		@Override
-		public T next() {
-          if (this._src != null && this._current!=null)
-          {
-              return this._current;
-          }
-          throw new RuntimeException();
+		public T next()
+		{
+	        if (!this.hasNext()) {
+	            throw new NoSuchElementException();
+	        }
+	        this._has_value=false;
+	        T nextValue = this._current;
+//	        this._current = null;//初期化いらない
+	        return nextValue;
 		}
     }
 

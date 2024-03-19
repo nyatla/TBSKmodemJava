@@ -17,8 +17,29 @@ public class Demodulation {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try{
+        	System.out.println("Byte form");
+    		var ret=demod.demodulateAsBytes(pcm.getDataAsDouble());
+    		if (ret == null)
+    		{
+    			System.out.print("None");
+    		}
+    		else
+    		{
+    			int c=0;
+    			for(var i:ret){
+    				System.out.print(i);
+    				System.out.println();
+    				c=c+1;
+    			}
+    		}
+        	
+        }catch(RecoverableException e) {
+        	
+        }
 
         try{
+        	System.out.println("Bit form");
     		var ret=demod.demodulateAsBit(pcm.getDataAsDouble());
     		if (ret == null)
     		{
@@ -39,6 +60,5 @@ public class Demodulation {
         }catch(RecoverableException e) {
         	
         }
-
 	}
 }

@@ -6,7 +6,7 @@
  */
 
 val SRCDIR="../../src"
-val projectVersion: String ="0.3.8"
+val projectVersion: String ="0.3.10"
 
 plugins {
     // Apply the java-library plugin for API and implementation separation.

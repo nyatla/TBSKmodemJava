@@ -12,7 +12,8 @@ public class PnTone extends TraitTone{
 	private static final long serialVersionUID = 8218960567645922492L;
 	static private List<Double> _constructor_init(int seed, int interval, TraitTone base_tone)
     {
-        var tone = base_tone != null ? base_tone : new SinTone(20, 8);
+		assert(base_tone!=null);
+        var tone = base_tone;
         var pn = new XorShiftRand31(seed, 29);
         var c = 0;
         int f=0;

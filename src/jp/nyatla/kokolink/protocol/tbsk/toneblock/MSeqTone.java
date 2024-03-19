@@ -16,7 +16,8 @@ public class MSeqTone extends TraitTone{
 	private List<Integer> _sequence;
     static private List<Double> _constructor_init(MSequence mseq,TraitTone base_tone)
     {
-        var tone = base_tone != null ? base_tone : new SinTone(20, 1);
+		assert(base_tone!=null);    	
+        var tone = base_tone;
         var a = new ArrayList<Double>();
         for (var i :mseq.genOneCycle())
         {

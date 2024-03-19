@@ -91,11 +91,14 @@ public class TbskModulator_impl
         this._preamble = preamble;
         this._enc = new TraitBlockEncoder(tone);
     }
-    public IPyIterator<Double> modulateAsBit(IPyIterator<Integer> src,IPyIterator<Double> suffix,boolean suffix_pad)
+    public IPyIterator<Double> modulateAsBit(IPyIterator<Integer> src,IPyIterator<Double> prefix,IPyIterator<Double> suffix,boolean suffix_pad)
     {
         var ave_window_shift = Math.max((int)(this._tone.size() * 0.1), 2) / 2; //#検出用の平均フィルタは0.1*len(tone)//2だけずれてる。ここを直したらTraitBlockDecoderも直せ
         var l=new ArrayList<IPyIterator<Double>>();
         
+        if(prefix!=null) {
+        	l.add(prefix);
+        }
         l.add(this._preamble.getPreamble());
         l.add(this._enc.setInput(new DiffBitEncoder(0, new BitStream(src, 1))));
         if(suffix!=null) {

@@ -56,7 +56,7 @@ public class TbskModulator extends jp.nyatla.kokolink.protocol.tbsk.tbskmodem.Tb
         {
             suffix = new SuffixTone(this._tone);
         }		
-    	var w=super.modulateAsBit(src,suffix,true);
+    	var w=super.modulateAsBit(src,null,suffix,true);
         return w==null?null:TbskIterable.<Double>createInstance(w);
     }
 	
